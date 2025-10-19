@@ -36,6 +36,7 @@ fun Gestion_parcela() {
     Scaffold(
         topBar = {
             MainTopAppBar(
+                title = "Mis Parcelas",
                 onMenuClick = { /* Abrir drawer o menú */ },
                 onProfileClick = { /* Ir a perfil o ajustes */ }
             )
