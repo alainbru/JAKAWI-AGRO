@@ -23,7 +23,7 @@ import com.alpha.jakawiagro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagas1Screen(
+fun ModuloPlagas1(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onNextClick: () -> Unit = {}
@@ -49,7 +49,7 @@ fun ModuloPlagas1Screen(
                 .padding(padding)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally // <— TODO CENTRADO
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Spacer(Modifier.height(14.dp))
@@ -71,7 +71,7 @@ fun ModuloPlagas1Screen(
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF1B1B1B)
                 ),
-                textAlign = TextAlign.Center,                    // <— centrado
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -82,52 +82,44 @@ fun ModuloPlagas1Screen(
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = Color(0xFF3B3B3B)
                 ),
-                textAlign = TextAlign.Center,                    // <— centrado
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(16.dp))
 
-            // ===== SECCIÓN: Tarjeta verde con pasos (centrada) =====
+            // ===== SECCIÓN: Tarjeta con pasos =====
             Card(
                 colors = CardDefaults.cardColors(containerColor = greenCard),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .fillMaxWidth(0.92f)  // ancho ligeramente menor y centrado
+                    .fillMaxWidth(0.92f)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(18.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally // <— contenido centrado
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // ---- Paso 1: Observa atentamente
+
                     PasoItemImagen(
-                        // >>>>> AÑADE AQUÍ EL ÍCONO/IMAGEN DEL OJO <<<<<
-                        // Cambia 'icono_ojo' por tu archivo (p. ej. icono_asistencia, etc.)
                         drawableRes = R.drawable.icono_ojo,
                         texto = "Observa atentamente"
                     )
 
-                    // ---- Paso 2: Toma una foto clara
                     PasoItemImagen(
-                        // >>>>> AÑADE AQUÍ EL ÍCONO/IMAGEN DE CÁMARA <<<<<
-                        // Si tu archivo es icono.jpg, sería R.drawable.icono
+
                         drawableRes = R.drawable.icono_camara,
                         texto = "Toma una foto clara"
                     )
 
-                    // ---- Paso 3: Verifica la plaga o enfermedad
                     PasoItemImagen(
-                        // >>>>> AÑADE AQUÍ EL ÍCONO/IMAGEN DE BÚSQUEDA/CHECK <<<<<
                         drawableRes = R.drawable.icono_busqueda,
                         texto = "Verifica la plaga o enfermedad"
                     )
 
-                    // ---- Paso 4: Sigue la ficha técnica
                     PasoItemImagen(
-                        // >>>>> AÑADE AQUÍ EL ÍCONO/IMAGEN DE DOCUMENTO/FICHA <<<<<
                         drawableRes = R.drawable.icono_documento,
                         texto = "Sigue la ficha técnica"
                     )
@@ -136,7 +128,6 @@ fun ModuloPlagas1Screen(
 
             Spacer(Modifier.height(24.dp))
 
-            // ===== SECCIÓN: Botón SIGUIENTE (ya centrado) =====
             Button(
                 onClick = onNextClick,
                 shape = RoundedCornerShape(14.dp),
@@ -147,8 +138,6 @@ fun ModuloPlagas1Screen(
             ) {
                 Text("SIGUIENTE")
                 Spacer(Modifier.width(8.dp))
-                // >>>>> OPCIONAL: usa una imagen de flechas si la tienes en drawable <<<<<
-                // Ej: Image(painterResource(R.drawable.icono_flechas), contentDescription = "Ir")
                 Text("»»", textAlign = TextAlign.Center)
             }
 
@@ -157,10 +146,7 @@ fun ModuloPlagas1Screen(
     }
 }
 
-/**
- * Item de paso con imagen de res/drawable, centrado horizontalmente.
- * - Sustituye 'drawableRes' por tus propios recursos en cada uso.
- */
+
 @Composable
 fun PasoItemImagen(
     drawableRes: Int,
@@ -168,12 +154,11 @@ fun PasoItemImagen(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,           // <— centrado
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        // >>>>> AÑADE TU ÍCONO/IMAGEN AQUÍ <<<<<
-        // Coloca tu PNG/JPG en res/drawable y pásalo como drawableRes
+
         Image(
             painter = painterResource(id = drawableRes),
             contentDescription = null,
@@ -186,15 +171,15 @@ fun PasoItemImagen(
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF103B2B)
             ),
-            textAlign = TextAlign.Center                      // <— texto centrado
+            textAlign = TextAlign.Center
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagas1Screen() {
-    ModuloPlagas1Screen()
+fun PreviewPlagas1() {
+    ModuloPlagas1()
 }
 
 

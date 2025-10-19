@@ -32,7 +32,7 @@ import com.alpha.jakawiagro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasFotoScreen(
+fun ModuloPlagasFoto(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onTomarFotoClick: () -> Unit = {},
@@ -54,27 +54,22 @@ fun ModuloPlagasFotoScreen(
         },
         containerColor = greenBar
     ) { padding ->
-        // Box para centrar vertical y horizontalmente el contenido
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(beige)
                 .padding(padding)
         ) {
-            // Si tu contenido puede crecer, puedes envolver la Column con verticalScroll,
-            // pero al centrar normalmente no hace falta. La dejo por seguridad.
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp)
-                    .align(Alignment.Center) // <<— CENTRADO TOTAL DEL BLOQUE
+                    .align(Alignment.Center)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // ===== Ilustración superior =====
-                // >>> Coloca tu archivo en res/drawable (ej.: planta_lupa.png)
-                // y reemplaza R.drawable.planta_lupa por tu ID real.
                 Image(
                     painter = painterResource(id = R.drawable.planta_lupa),
                     contentDescription = "Ilustración instrucciones",
@@ -96,7 +91,6 @@ fun ModuloPlagasFotoScreen(
 
                 Spacer(Modifier.height(20.dp))
 
-                // ===== Contenedor de botones =====
                 Card(
                     colors = CardDefaults.cardColors(containerColor = mintLight.copy(alpha = 0.15f)),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -109,9 +103,8 @@ fun ModuloPlagasFotoScreen(
                             .padding(vertical = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // ---- Botón TOMAR FOTO
+
                         AccionFotoButton(
-                            // >>> Ícono de cámara en drawable (ej.: icono_camara.png)
                             iconRes = R.drawable.icono_camara,
                             text = "TOMAR FOTO",
                             containerColor = mint,
@@ -120,9 +113,7 @@ fun ModuloPlagasFotoScreen(
 
                         Spacer(Modifier.height(16.dp))
 
-                        // ---- Botón SUBIR FOTO
                         AccionFotoButton(
-                            // >>> Ícono de subir en drawable (ej.: icono_subir.png)
                             iconRes = R.drawable.icono_subir,
                             text = "SUBIR FOTO",
                             containerColor = mint,
@@ -133,7 +124,6 @@ fun ModuloPlagasFotoScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // ===== “VER EJEMPLO” =====
                 Text(
                     text = "VER EJEMPLO",
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -141,7 +131,7 @@ fun ModuloPlagasFotoScreen(
                         color = Color(0xFF1B1B1B),
                         letterSpacing = 0.5.sp
                     ),
-                    // centrado también
+
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -210,7 +200,7 @@ fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasFotoScreen() {
-    ModuloPlagasFotoScreen()
+fun PreviewModuloPlagasFoto() {
+    ModuloPlagasFoto()
 }
 

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasRegistrarParcelaScreen(
+fun ModuloPlagasRegistrar(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onRegistrarClick: (String) -> Unit = {},
@@ -102,7 +102,6 @@ fun ModuloPlagasRegistrarParcelaScreen(
                         onValueChange = {},
                         readOnly = true,
                         leadingIcon = {
-                            // Cuadro de color tipo "leyenda" de parcela
                             Box(
                                 modifier = Modifier
                                     .size(18.dp)
@@ -191,6 +190,6 @@ fun ModuloPlagasRegistrarParcelaScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasRegistrarParcelaScreen() {
-    ModuloPlagasRegistrarParcelaScreen()
+fun PreviewModuloPlagasRegistrar() {
+    ModuloPlagasRegistrar()
 }

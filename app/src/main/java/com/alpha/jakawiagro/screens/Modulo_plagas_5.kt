@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasFichaTecnicaScreen(
+fun ModuloPlagasFicha(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onRegistrarClick: () -> Unit = {},
@@ -39,10 +39,10 @@ fun ModuloPlagasFichaTecnicaScreen(
 ) {
     val beige = Color(0xFFF1EAD9)
     val greenBar = Color(0xFF8BC34A)
-    val panelBg = Color(0xFFF5F7F2)          // panel claro del texto
-    val panelBorder = Color(0xFFE1E5DA)      // borde suave del panel
-    val mint = Color(0xFF78D9AE)             // botón “ATRAS”
-    val darkBtn = Color(0xFF2E3C30)          // botón “REGISTRAR…”
+    val panelBg = Color(0xFFF5F7F2)
+    val panelBorder = Color(0xFFE1E5DA)
+    val mint = Color(0xFF78D9AE)
+    val darkBtn = Color(0xFF2E3C30)
 
     Scaffold(
         topBar = {
@@ -64,13 +64,11 @@ fun ModuloPlagasFichaTecnicaScreen(
         ) {
             Spacer(Modifier.height(12.dp))
 
-            // Contenedor centrado con ancho cómodo
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .widthIn(max = 360.dp)
             ) {
-                // Panel de texto con borde y esquinas redondeadas
                 Card(
                     colors = CardDefaults.cardColors(containerColor = panelBg),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -84,7 +82,6 @@ fun ModuloPlagasFichaTecnicaScreen(
                             .verticalScroll(rememberScrollState())
                             .padding(14.dp)
                     ) {
-                        // —— Reemplaza este contenido por tu ficha técnica ——
                         Text(
                             text = """
 Estado de conservación general: En general, la mayoría de las especies del género Gamocheta no están consideradas en riesgo a nivel global. A menudo son malezas o plantas silvestres comunes que crecen en áreas perturbadas, como bordes de caminos o terrenos de cultivo. Esto sugiere que son bastante resistentes y adaptables.
@@ -108,13 +105,11 @@ Factores que afectan su salud:
 
                 Spacer(Modifier.height(16.dp))
 
-                // Fila de botones
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // REGISTRAR EN PARCELA (oscuro)
                     Button(
                         onClick = onRegistrarClick,
                         colors = ButtonDefaults.buttonColors(
@@ -142,7 +137,6 @@ Factores que afectan su salud:
                         )
                     }
 
-                    // ATRAS (menta con flecha)
                     Button(
                         onClick = onAtrasClick,
                         colors = ButtonDefaults.buttonColors(
@@ -176,6 +170,6 @@ Factores que afectan su salud:
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasFichaTecnicaScreen() {
-    ModuloPlagasFichaTecnicaScreen()
+fun PreviewModuloPlagasFicha() {
+    ModuloPlagasFicha()
 }

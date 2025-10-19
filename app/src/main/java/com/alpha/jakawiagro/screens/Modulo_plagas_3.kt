@@ -12,7 +12,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,15 +27,15 @@ import com.alpha.jakawiagro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasEjemploScreen(
+fun ModuloPlagasEjemplo(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)         // fondo crema
-    val greenBar = Color(0xFF8BC34A)      // top bar
-    val frameGray = Color(0xFF666666)     // marco de la foto
-    val mint = Color(0xFF78D9AE)          // color botón "ATRAS"
+    val beige = Color(0xFFF1EAD9)
+    val greenBar = Color(0xFF8BC34A)
+    val frameGray = Color(0xFF666666)
+    val mint = Color(0xFF78D9AE)
 
     Scaffold(
         topBar = {
@@ -54,12 +53,10 @@ fun ModuloPlagasEjemploScreen(
                 .background(beige)
                 .padding(padding)
         ) {
-            // ======= Imagen centrada con marco =======
-            // >>>> AÑADE TU IMAGEN EN res/drawable (ej.: ejemplo_plaga.jpg/png)
-            // y reemplaza R.drawable.ejemplo_plaga por tu recurso real.
+
             Card(
                 modifier = Modifier
-                    .align(Alignment.Center)      // CENTRADO total
+                    .align(Alignment.Center)
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(0.8f),
                 shape = RoundedCornerShape(16.dp),
@@ -78,12 +75,11 @@ fun ModuloPlagasEjemploScreen(
                         modifier = Modifier
                             .clip(RoundedCornerShape(12.dp))
                             .fillMaxWidth()
-                            .aspectRatio(3f / 4f)  // relación similar al mock
+                            .aspectRatio(3f / 4f)
                     )
                 }
             }
 
-            // ======= Botón ATRAS abajo a la derecha =======
             Button(
                 onClick = onBackClick,
                 colors = ButtonDefaults.buttonColors(
@@ -109,6 +105,6 @@ fun ModuloPlagasEjemploScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasEjemploScreen() {
-    ModuloPlagasEjemploScreen()
+fun PreviewModuloPlagasEjemplo() {
+    ModuloPlagasEjemplo()
 }
