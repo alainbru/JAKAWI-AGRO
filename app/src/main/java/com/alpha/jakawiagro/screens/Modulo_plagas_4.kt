@@ -23,7 +23,7 @@ import com.alpha.jakawiagro.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasResultadoScreen(
+fun ModuloPlagasResultado(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onDetectarClick: () -> Unit = {},
@@ -53,7 +53,6 @@ fun ModuloPlagasResultadoScreen(
         ) {
             Spacer(Modifier.height(70.dp))
 
-            // Contenedor centrado arriba (mismo contenido, sin cambios)
             Column(
                 modifier = Modifier
                     .widthIn(max = 360.dp)
@@ -61,7 +60,6 @@ fun ModuloPlagasResultadoScreen(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Foto con marco (igual que tenías)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,7 +79,6 @@ fun ModuloPlagasResultadoScreen(
 
                 Spacer(Modifier.height(14.dp))
 
-                // Separador sutil (igual)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -91,7 +88,6 @@ fun ModuloPlagasResultadoScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                // —— NUEVO: “cuadro” para los botones (estético) ——
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color(0x14000000)),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -105,7 +101,6 @@ fun ModuloPlagasResultadoScreen(
                         horizontalArrangement = spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Botón DETECTAR (sin cambios)
                         AccionIconButton(
                             iconRes = R.drawable.icono_busqueda,
                             text = "DETECTAR",
@@ -113,7 +108,6 @@ fun ModuloPlagasResultadoScreen(
                             onClick = onDetectarClick,
                             modifier = Modifier.weight(1f)
                         )
-                        // Botón VOLVER A TOMAR FOTO (sin cambios)
                         AccionIconButton(
                             iconRes = R.drawable.icono_camara,
                             text = "VOLVER A\nTOMAR FOTO",
@@ -178,7 +172,7 @@ fun AccionIconButton(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasResultadoScreen() {
-    ModuloPlagasResultadoScreen()
+fun PreviewModuloPlagasResultado() {
+    ModuloPlagasResultado()
 }
 

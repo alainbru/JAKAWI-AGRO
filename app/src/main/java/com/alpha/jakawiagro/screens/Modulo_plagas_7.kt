@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuloPlagasRegistroExitosoScreen(
+fun ModuloPlagasRegistro(
     parcelaNombre: String = "Parcela 1",
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
@@ -35,9 +35,9 @@ fun ModuloPlagasRegistroExitosoScreen(
 ) {
     val beige = Color(0xFFF1EAD9)
     val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFFA6E6C9)      // “Ver historial”
-    val deepGreen = Color(0xFF2F7261) // “Asignar tarea”
-    val mintBtn = Color(0xFF78D9AE)   // botón ATRAS
+    val mint = Color(0xFFA6E6C9)
+    val deepGreen = Color(0xFF2F7261)
+    val mintBtn = Color(0xFF78D9AE)
 
     Scaffold(
         topBar = {
@@ -55,7 +55,7 @@ fun ModuloPlagasRegistroExitosoScreen(
                 .background(beige)
                 .padding(padding)
         ) {
-            // Contenido centrado
+            // Contenido
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,7 +123,6 @@ fun ModuloPlagasRegistroExitosoScreen(
                 }
             }
 
-            // Botón ATRAS fijo abajo-derecha
             Button(
                 onClick = onAtrasClick,
                 colors = ButtonDefaults.buttonColors(
@@ -149,6 +148,6 @@ fun ModuloPlagasRegistroExitosoScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewModuloPlagasRegistroExitosoScreen() {
-    ModuloPlagasRegistroExitosoScreen()
+fun PreviewModuloPlagas() {
+    ModuloPlagasRegistro()
 }
