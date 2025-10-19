@@ -119,6 +119,8 @@ fun CalendarioConNavegacion() {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
+
+
         ) {
             IconButton(onClick = {
                 fechaActual = fechaActual.minusMonths(1)
