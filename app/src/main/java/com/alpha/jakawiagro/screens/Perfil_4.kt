@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +31,7 @@ fun HistorialPersonal(
     val beige = Color(0xFFF1EAD9)
     val greenBar = Color(0xFFBFD84E)
     val buttonGreen = Color(0xFFDCE775)
+    val cardBg = Color(0xFFF9F6EC)
 
     Scaffold(
         topBar = {
@@ -57,8 +59,8 @@ fun HistorialPersonal(
                 text = "Resumen de tus actividades",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = Color(0xFF1B1B1B),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 ),
                 textAlign = TextAlign.Center
             )
@@ -68,54 +70,72 @@ fun HistorialPersonal(
             HistorialItem(
                 icono = R.drawable.icono_parcelas,
                 valor = "12",
-                descripcion = "Parcelas registradas"
+                descripcion = "Parcelas registradas",
+                backgroundColor = cardBg
             )
             HistorialItem(
                 icono = R.drawable.icono_plagas,
                 valor = "6",
-                descripcion = "Plagas detectadas"
+                descripcion = "Plagas detectadas",
+                backgroundColor = cardBg
             )
             HistorialItem(
                 icono = R.drawable.icono_asistencia,
                 valor = "21",
-                descripcion = "Asistencias completadas"
+                descripcion = "Asistencias completadas",
+                backgroundColor = cardBg
             )
             HistorialItem(
                 icono = R.drawable.icono_calendario,
                 valor = "Hoy a las 16:30",
-                descripcion = "Última actividad"
+                descripcion = "Última actividad",
+                backgroundColor = cardBg
             )
 
             Spacer(Modifier.height(40.dp))
 
-            // Botones inferiores
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
                     onClick = onExportarClick,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = buttonGreen,
                         contentColor = Color.Black
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .shadow(4.dp, RoundedCornerShape(14.dp))
                 ) {
-                    Text("EXPORTAR DATOS", textAlign = TextAlign.Center)
+                    Text(
+                        "EXPORTAR DATOS",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
                 }
 
                 Spacer(Modifier.width(12.dp))
 
                 OutlinedButton(
                     onClick = onVolverClick,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = Color(0xFF333333)
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
                 ) {
-                    Text("VOLVER", textAlign = TextAlign.Center)
+                    Text(
+                        "VOLVER",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp
+                    )
                 }
             }
 
@@ -128,38 +148,49 @@ fun HistorialPersonal(
 fun HistorialItem(
     icono: Int,
     valor: String,
-    descripcion: String
+    descripcion: String,
+    backgroundColor: Color
 ) {
-    Row(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+            .padding(vertical = 8.dp)
+            .shadow(3.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
-        Image(
-            painter = painterResource(id = icono),
-            contentDescription = descripcion,
-            modifier = Modifier.size(36.dp)
-        )
-
-        Spacer(Modifier.width(16.dp))
-
-        Column {
-            Text(
-                text = valor,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color(0xFF1B1B1B)
-                )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Image(
+                painter = painterResource(id = icono),
+                contentDescription = descripcion,
+                modifier = Modifier.size(40.dp)
             )
-            Text(
-                text = descripcion,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFF4F4F4F)
+
+            Spacer(Modifier.width(20.dp))
+
+            Column {
+                Text(
+                    text = valor,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp,
+                        color = Color(0xFF1B1B1B)
+                    )
                 )
-            )
+                Text(
+                    text = descripcion,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color(0xFF4F4F4F),
+                        fontSize = 14.sp
+                    )
+                )
+            }
         }
     }
 }

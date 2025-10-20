@@ -2,6 +2,7 @@ package com.alpha.jakawiagro.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +35,8 @@ fun PerfilPrincipal(
 ) {
     val beige = Color(0xFFF1EAD9)
     val greenBar = Color(0xFFBFD84E)
-    val greenButton = Color(0xFFDFF57A)
+    val buttonGreen = Color(0xFFDCE775)
+    val cardBg = Color(0xFFF9F6EC)
 
     Scaffold(
         topBar = {
@@ -54,20 +58,33 @@ fun PerfilPrincipal(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(28.dp))
 
-            // Imagen de perfil
-            Image(
-                painter = painterResource(id = R.drawable.icono_camara),
-                contentDescription = "Foto de perfil",
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(130.dp)
                     .clip(CircleShape)
-            )
+                    .background(Color.White)
+                    .border(
+                        width = 4.dp,
+                        brush = Brush.linearGradient(
+                            listOf(Color(0xFFAED581), Color(0xFF8BC34A))
+                        ),
+                        shape = CircleShape
+                    )
+                    .shadow(6.dp, CircleShape)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icono_camara),
+                    contentDescription = "Foto de perfil",
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                )
+            }
 
-            Spacer(Modifier.height(12.dp))
-
-            // Nombre
+            Spacer(Modifier.height(14.dp))
             Text(
                 text = "ELSA PATO",
                 style = MaterialTheme.typography.titleLarge.copy(
@@ -76,7 +93,6 @@ fun PerfilPrincipal(
                 )
             )
 
-            // Ocupación
             Text(
                 text = "Agricultora familiar",
                 style = MaterialTheme.typography.bodyMedium.copy(
@@ -84,9 +100,8 @@ fun PerfilPrincipal(
                 )
             )
 
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(6.dp))
 
-            // Ubicación
             Text(
                 text = "📍 Puno",
                 style = MaterialTheme.typography.bodyMedium.copy(
@@ -94,52 +109,76 @@ fun PerfilPrincipal(
                 )
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(28.dp))
 
-            // Botones de acción
-            PerfilButton("EDITAR PERFIL", onEditarPerfilClick)
-            PerfilButton("CONFIGURACIONES", onConfiguracionClick)
-            PerfilButton("HISTORIAL", onHistorialClick)
-            PerfilButton("SOPORTE Y AYUDA", onSoporteClick)
+            PerfilCardButton("✏️  EDITAR PERFIL", onEditarPerfilClick)
+            PerfilCardButton("⚙️  CONFIGURACIONES", onConfiguracionClick)
+            PerfilCardButton("📋  HISTORIAL", onHistorialClick)
+            PerfilCardButton("💬  SOPORTE TECNICO ", onSoporteClick)
 
-            Spacer(Modifier.height(12.dp))
-
-            // Botón de cerrar sesión
-            TextButton(onClick = onCerrarSesionClick) {
+            Spacer(Modifier.height(20.dp))
+            Button(
+                onClick = onCerrarSesionClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Color(0xFFD32F2F)
+                ),
+                border = ButtonDefaults.outlinedButtonBorder.copy(
+                    brush = Brush.linearGradient(
+                        colors = listOf(Color(0xFFD32F2F), Color(0xFFEF5350))
+                    )
+                ),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(50.dp)
+            ) {
                 Text(
                     text = "CERRAR SESIÓN",
-                    color = Color(0xFFD32F2F),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
                 )
             }
+
+            Spacer(Modifier.height(24.dp))
         }
     }
 }
 
 @Composable
-fun PerfilButton(
+fun PerfilCardButton(
     text: String,
     onClick: () -> Unit
 ) {
-    val buttonColor = Color(0xFFDCE775)
-
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = buttonColor,
-            contentColor = Color.Black
-        ),
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
+            .padding(vertical = 8.dp)
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F6EC))
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Medium
+        Button(
+            onClick = onClick,
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFDCE775),
+                contentColor = Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp)
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 17.sp
+                ),
+                modifier = Modifier.padding(vertical = 6.dp)
             )
-        )
+        }
     }
 }
 
@@ -148,5 +187,4 @@ fun PerfilButton(
 fun PreviewPerfilPrincipal() {
     PerfilPrincipal()
 }
-
 

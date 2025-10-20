@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,8 +30,8 @@ fun EditarPerfil(
     val beige = Color(0xFFF1EAD9)
     val greenBar = Color(0xFFBFD84E)
     val buttonGreen = Color(0xFFDCE775)
+    val cardBg = Color(0xFFF9F6EC)
 
-    // Estados de los campos
     var nombre by remember { mutableStateOf("Juan") }
     var apellido by remember { mutableStateOf("Pérez Condori") }
     var telefono by remember { mutableStateOf("") }
@@ -63,66 +64,95 @@ fun EditarPerfil(
                 text = "Actualiza tu información personal",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = Color(0xFF1B1B1B),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 ),
                 textAlign = TextAlign.Center
             )
 
             Spacer(Modifier.height(24.dp))
 
-            // Campos de texto
-            PerfilTextField(label = "Nombre", value = nombre, onValueChange = { nombre = it })
-            PerfilTextField(label = "Apellido", value = apellido, onValueChange = { apellido = it })
-            PerfilTextField(
+            // ===== Campos con estilo mejorado =====
+            PerfilInputCard(
+                label = "Nombre",
+                value = nombre,
+                onValueChange = { nombre = it },
+                keyboardType = KeyboardType.Text
+            )
+
+            PerfilInputCard(
+                label = "Apellido",
+                value = apellido,
+                onValueChange = { apellido = it },
+                keyboardType = KeyboardType.Text
+            )
+
+            PerfilInputCard(
                 label = "Teléfono",
                 value = telefono,
                 onValueChange = { telefono = it },
-                keyboardType = KeyboardType.Phone
+                keyboardType = KeyboardType.Number
             )
-            PerfilTextField(
+
+            PerfilInputCard(
                 label = "Correo electrónico",
                 value = correo,
                 onValueChange = { correo = it },
                 keyboardType = KeyboardType.Email
             )
-            PerfilTextField(
+
+            PerfilInputCard(
                 label = "DNI",
                 value = dni,
                 onValueChange = { dni = it },
                 keyboardType = KeyboardType.Number
             )
 
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(32.dp))
 
-            // Botones de acción
+            // ===== Botones =====
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
                     onClick = onGuardarClick,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = buttonGreen,
                         contentColor = Color.Black
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .shadow(4.dp, RoundedCornerShape(14.dp))
                 ) {
-                    Text("GUARDAR CAMBIOS", textAlign = TextAlign.Center)
+                    Text(
+                        "GUARDAR CAMBIOS",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
                 }
 
                 Spacer(Modifier.width(12.dp))
 
                 OutlinedButton(
                     onClick = onCancelarClick,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = Color(0xFF333333)
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
                 ) {
-                    Text("CANCELAR", textAlign = TextAlign.Center)
+                    Text(
+                        "CANCELAR",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp
+                    )
                 }
             }
 
@@ -131,29 +161,40 @@ fun EditarPerfil(
     }
 }
 
+// ===== Campo de texto dentro de una tarjeta con sombra =====
 @Composable
-fun PerfilTextField(
+fun PerfilInputCard(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = true,
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFF8BC34A),
-            unfocusedBorderColor = Color(0xFFB0B0B0),
-            focusedLabelColor = Color(0xFF558B2F)
+            .padding(vertical = 6.dp)
+            .shadow(3.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F6EC))
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(label) },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF8BC34A),
+                unfocusedBorderColor = Color(0xFFB0B0B0),
+                focusedLabelColor = Color(0xFF558B2F),
+                cursorColor = Color(0xFF558B2F)
+            )
         )
-    )
+    }
 }
 
 @Preview(showBackground = true)

@@ -36,7 +36,7 @@ fun SoporteAyuda(
     Scaffold(
         topBar = {
             MainTopAppBar(
-                title = "SOPORTE Y/O AYUDA",
+                title = "SOPORTE TECNICO",
                 onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
@@ -66,8 +66,6 @@ fun SoporteAyuda(
             )
 
             Spacer(Modifier.height(30.dp))
-
-            // Recuadros de soporte con estilo tipo botón
             SoporteCard(
                 icono = R.drawable.icono_preguntas,
                 texto = "Preguntas frecuentes (FAQ)"
@@ -83,7 +81,6 @@ fun SoporteAyuda(
 
             Spacer(Modifier.height(40.dp))
 
-            // Botones inferiores
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -143,7 +140,7 @@ fun SoporteCard(
                 painter = painterResource(id = icono),
                 contentDescription = texto,
                 modifier = Modifier
-                    .size(48.dp) // ícono un poco más grande
+                    .size(48.dp)
                     .padding(end = 16.dp)
             )
             Text(

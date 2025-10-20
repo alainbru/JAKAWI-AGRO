@@ -30,7 +30,6 @@ fun ConfiguracionCuenta(
     val buttonGreen = Color(0xFFDCE775)
     val cardBg = Color(0xFFF9F6EC)
 
-    // Estados de configuración
     var notificaciones by remember { mutableStateOf(true) }
     var geolocalizacion by remember { mutableStateOf(true) }
     var usoOffline by remember { mutableStateOf(false) }
@@ -70,7 +69,6 @@ fun ConfiguracionCuenta(
 
             Spacer(Modifier.height(30.dp))
 
-            // Card: Notificaciones
             ConfigCard {
                 ConfigSwitchItem(
                     label = "Notificaciones",
@@ -79,15 +77,12 @@ fun ConfiguracionCuenta(
                 )
             }
 
-            // Card: Idioma
             ConfigCard {
                 IdiomaSelector(
                     idioma = idiomaSeleccionado,
                     onIdiomaSeleccionado = { idiomaSeleccionado = it }
                 )
             }
-
-            // Card: Geolocalización automática
             ConfigCard {
                 ConfigSwitchItem(
                     label = "Geolocalización automática",
@@ -96,7 +91,6 @@ fun ConfiguracionCuenta(
                 )
             }
 
-            // Card: Uso offline
             ConfigCard {
                 ConfigSwitchItem(
                     label = "Uso offline",
@@ -107,7 +101,6 @@ fun ConfiguracionCuenta(
 
             Spacer(Modifier.height(32.dp))
 
-            // Botones de acción
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
