@@ -1,26 +1,15 @@
 package com.alpha.jakawiagro.screens
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,26 +27,42 @@ fun LoginScreenPreview() {
 
 @Composable
 fun LoginScreen() {
-    // Puedes reemplazar esto con tu ruta de imagen
+    // Estado para controlar qué vista mostrar: true = recuperación de contraseña, false = login
+    var showRecovery by remember { mutableStateOf(false) }
 
-    Column(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFEDE7D5))
             .padding(horizontal = 32.dp),
+    ) {
+        Crossfade(targetState = showRecovery) { isRecovery ->
+            if (isRecovery) {
+                // Pantalla de recuperación de contraseña
+                PasswordRecovery(onBack = { showRecovery = false })
+            } else {
+                // Pantalla principal de login
+                LoginForm(onForgotPassword = { showRecovery = true })
+            }
+        }
+    }
+}
+
+@Composable
+fun LoginForm(onForgotPassword: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 🟩 Logo (reemplaza con tu imagen)
         Image(
-            painter = painterResource(id = R.drawable.icono), // ← Inserta tu ruta aquí
+            painter = painterResource(id = R.drawable.icono),
             contentDescription = "Logo Jakawi Agro",
             modifier = Modifier
-                .size(120.dp)
+                .size(240.dp)
                 .padding(bottom = 24.dp)
         )
 
-        // 👤 Campo Usuario
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -68,7 +73,6 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔒 Campo Contraseña
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -80,20 +84,18 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // ✅ Botón Iniciar
         Button(
             onClick = { /* Acción de login */ },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Verde
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
         ) {
             Text("INICIAR", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔗 Enlaces de registro y recuperación
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -106,8 +108,51 @@ fun LoginScreen() {
             Text(
                 text = "OLVIDASTE LA CONTRASEÑA",
                 color = Color.Black,
-                modifier = Modifier.clickable { /* Acción de recuperación */ }
+                modifier = Modifier.clickable { onForgotPassword() }
             )
         }
     }
 }
+
+@Composable
+fun PasswordRecovery(onBack: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Recuperar Contraseña",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text("Correo electrónico") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { /* Acción para enviar correo recuperación */ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+        ) {
+            Text("ENVIAR", color = Color.White)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "VOLVER",
+            color = Color.Black,
+            modifier = Modifier.clickable { onBack() }
+        )
+    }
+}
+

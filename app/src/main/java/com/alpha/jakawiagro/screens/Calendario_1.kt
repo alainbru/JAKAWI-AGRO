@@ -1,7 +1,7 @@
-package com.alpha.jakawiagro.screens
-
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,47 +13,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpha.jakawiagro.screens.MainTopAppBar
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-
-@Composable
-fun CalendarioP() {
-    Scaffold(
-        topBar = {
-            MainTopAppBar(
-                title = "CALENDARIO",
-                onMenuClick = { /* Abrir drawer o menú */ },
-                onProfileClick = { /* Ir a perfil o ajustes */ }
-            )
-        },
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Calendario'",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            }
-        }
-    )
-}
-
-
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarioMensual(
+fun CalendarioMensualConAnimacion(
     year: Int,
     month: Int,
     selectedDate: LocalDate?,
@@ -62,17 +34,24 @@ fun CalendarioMensual(
     val diasSemana = listOf("L", "M", "Mi", "J", "V", "S", "D")
     val primerDiaMes = LocalDate.of(year, month, 1)
     val diasEnMes = primerDiaMes.lengthOfMonth()
-    val primerDiaSemana = primerDiaMes.dayOfWeek.value % 7 // Lunes = 1 → 0 index
+    val primerDiaSemana = primerDiaMes.dayOfWeek.value - 1
 
     Column(modifier = Modifier.padding(16.dp)) {
-        // Encabezado de días
+        // Encabezado de días de semana
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            diasSemana.forEach {
-                Text(text = it, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+            diasSemana.forEach { diaSemana ->
+                Text(
+                    text = diaSemana,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
 
-        // Celdas de días
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Días animados
         val totalCeldas = ((primerDiaSemana + diasEnMes + 6) / 7) * 7
         for (fila in 0 until totalCeldas step 7) {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -92,16 +71,24 @@ fun CalendarioMensual(
                     ) {
                         if (fechaActual != null) {
                             val isSelected = fechaActual == selectedDate
-                            Text(
-                                text = dia.toString(),
-                                color = if (isSelected) Color.White else Color.Black,
-                                modifier = Modifier
-                                    .background(
-                                        if (isSelected) Color.Blue else Color.Transparent,
-                                        shape = CircleShape
+
+                            // Animación para el cambio de selección del día
+                            AnimatedContent(targetState = isSelected) { selected ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(if (selected) Color(0xFF1976D2) else Color.Transparent),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = dia.toString(),
+                                        color = if (selected) Color.White else Color.Black,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        modifier = Modifier.padding(4.dp)
                                     )
-                                    .padding(8.dp)
-                            )
+                                }
+                            }
                         }
                     }
                 }
@@ -109,39 +96,59 @@ fun CalendarioMensual(
         }
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CalendarioConNavegacion() {
+fun CalendarioConNavegacionAnimado() {
     var fechaActual by remember { mutableStateOf(LocalDate.now()) }
     var fechaSeleccionada by remember { mutableStateOf<LocalDate?>(null) }
+    var mesAnterior by remember { mutableStateOf(fechaActual.monthValue) }
 
     Column {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = {
+                mesAnterior = fechaActual.monthValue
                 fechaActual = fechaActual.minusMonths(1)
             }) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Mes anterior")
             }
 
-            Text(
-                text = "${fechaActual.month.getDisplayName(TextStyle.FULL, Locale("es"))} ${fechaActual.year}",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
+            AnimatedContent(
+                targetState = fechaActual,
+                transitionSpec = {
+                    if (targetState.monthValue > initialState.monthValue) {
+                        slideInHorizontally(animationSpec = tween(300)) { width -> width } + fadeIn() with
+                                slideOutHorizontally(animationSpec = tween(300)) { width -> -width } + fadeOut()
+                    } else {
+                        slideInHorizontally(animationSpec = tween(300)) { width -> -width } + fadeIn() with
+                                slideOutHorizontally(animationSpec = tween(300)) { width -> width } + fadeOut()
+                    }.using(SizeTransform(clip = false))
+                }
+            ) { fecha ->
+                Text(
+                    text = "${fecha.month.getDisplayName(TextStyle.FULL, Locale("es"))} ${fecha.year}",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
 
             IconButton(onClick = {
+                mesAnterior = fechaActual.monthValue
                 fechaActual = fechaActual.plusMonths(1)
             }) {
                 Icon(Icons.Default.ArrowForward, contentDescription = "Mes siguiente")
             }
         }
 
-        CalendarioMensual(
+        CalendarioMensualConAnimacion(
             year = fechaActual.year,
             month = fechaActual.monthValue,
             selectedDate = fechaSeleccionada,
@@ -150,18 +157,17 @@ fun CalendarioConNavegacion() {
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewCalendarioP() {
+fun PreviewCalendarioAnimado() {
     MaterialTheme {
         Scaffold(
             topBar = {
                 MainTopAppBar(
                     title = "CALENDARIO",
-                    onMenuClick = { },
-                    onProfileClick = { }
+                    onMenuClick = {},
+                    onProfileClick = {}
                 )
             },
             content = { padding ->
@@ -169,21 +175,19 @@ fun PreviewCalendarioP() {
                     modifier = Modifier
                         .padding(padding)
                         .fillMaxSize()
-                        .padding(16.dp)
                 ) {
-                    // Título
                     Text(
-                        text = "Calendario",
+                        text = "Calendario Animado",
                         style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(16.dp)
                     )
 
-                    // Llamamos al calendario con navegación
-                    CalendarioConNavegacion()
+                    CalendarioConNavegacionAnimado()
                 }
             }
         )
     }
 }
+
 
 

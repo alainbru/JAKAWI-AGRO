@@ -1,26 +1,16 @@
 package com.alpha.jakawiagro.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,30 +26,30 @@ import com.alpha.jakawiagro.R
 fun RegisterScreenPreview() {
     RegisterScreen()
 }
+
 @Composable
 fun RegisterScreen() {
+    // Estado para simular carga/confirmación del botón
+    var clicked by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEDE7D5)) // Fondo claro tipo beige
+            .background(Color(0xFFEDE7D5))
             .padding(horizontal = 32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 🌿 Logo
         Image(
-            painter = painterResource(id = R.drawable.icono), // ← Tu logo aquí
+            painter = painterResource(id = R.drawable.icono),
             contentDescription = "Logo Jakawi Agro",
             modifier = Modifier
                 .size(120.dp)
                 .padding(bottom = 8.dp)
         )
 
-
-
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 👤 Nombre
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -70,7 +60,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 📧 Correo
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -81,7 +70,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔒 Contraseña
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -93,7 +81,6 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔒 Confirmar contraseña
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -105,26 +92,32 @@ fun RegisterScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🟡 Botón Registrarse
         Button(
-            onClick = { /* Acción de registro */ },
+            onClick = {
+                clicked = !clicked // Alternar estado para animar el botón
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)) // Amarillo
+                .height(48.dp)
+                .animateContentSize(), // Aquí está la animación de cambio de tamaño
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107))
         ) {
-            Text("REGISTRARSE", color = Color.Black)
+            if (clicked) {
+                // Texto o indicador alternativo cuando está "clickeado"
+                Text("¡Registrado!", color = Color.Black)
+            } else {
+                Text("REGISTRARSE", color = Color.Black)
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🔗 Enlace para volver si ya estás registrado
         Text(
             text = "¿YA TE REGISTRASTE?",
             color = Color(0xFF03A9F4),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.clickable {
-                // Aquí irá la navegación a login más adelante
+                // Navegación a login aquí
             }
         )
     }

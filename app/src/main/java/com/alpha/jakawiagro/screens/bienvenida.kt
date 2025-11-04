@@ -1,25 +1,11 @@
 package com.alpha.jakawiagro.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,9 +19,20 @@ import com.alpha.jakawiagro.R
 @Preview
 @Composable
 fun PantallaBienvenidaHakwai() {
+    // InfiniteTransition para animar el tamaño del logo (efecto respiración)
+    val infiniteTransition = rememberInfiniteTransition()
+    val size by infiniteTransition.animateFloat(
+        initialValue = 110f,
+        targetValue = 130f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = Color(0xFFEDF6F0) // fondo suave tipo agro
+        containerColor = Color(0xFFEDF6F0)
     ) { padding ->
         Box(
             modifier = Modifier
@@ -49,10 +46,10 @@ fun PantallaBienvenidaHakwai() {
                 modifier = Modifier.padding(24.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icono), // ← Tu logo aquí
+                    painter = painterResource(id = R.drawable.icono),
                     contentDescription = "Logo Jakawi Agro",
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(size.dp)    // Tamaño animado
                         .padding(bottom = 8.dp)
                 )
 
@@ -80,3 +77,4 @@ fun PantallaBienvenidaHakwai() {
         }
     }
 }
+

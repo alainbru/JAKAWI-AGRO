@@ -57,7 +57,7 @@ fun ModuloAsistencia(
                 painter = painterResource(id = R.drawable.icono_bienvenida2),
                 contentDescription = "Asistente",
                 modifier = Modifier
-                    .size(90.dp)
+                    .size(180.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
 

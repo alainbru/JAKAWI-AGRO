@@ -142,10 +142,6 @@ fun ModuloPlagasFoto(
     }
 }
 
-/**
- * Botón grande con icono a la izquierda y texto centrado.
- * Reemplaza 'iconRes' por tu recurso en res/drawable.
- */
 @Composable
 fun AccionFotoButton(
     iconRes: Int,
