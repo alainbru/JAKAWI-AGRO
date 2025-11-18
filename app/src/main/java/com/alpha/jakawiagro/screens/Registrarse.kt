@@ -27,98 +27,101 @@ fun RegisterScreenPreview() {
     RegisterScreen()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen() {
-    // Estado para simular carga/confirmación del botón
     var clicked by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFEDE7D5))
-            .padding(horizontal = 32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.icono),
-            contentDescription = "Logo Jakawi Agro",
+    Scaffold { paddingValues ->
+
+        Column(
             modifier = Modifier
-                .size(120.dp)
-                .padding(bottom = 8.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Nombre") },
-            leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Correo Electrónico") },
-            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Contraseña") },
-            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Confirmar Contraseña") },
-            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                clicked = !clicked // Alternar estado para animar el botón
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .animateContentSize(), // Aquí está la animación de cambio de tamaño
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107))
+                .fillMaxSize()
+                .background(Color(0xFFEDE7D5))
+                .padding(paddingValues)
+                .padding(horizontal = 32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (clicked) {
-                // Texto o indicador alternativo cuando está "clickeado"
-                Text("¡Registrado!", color = Color.Black)
-            } else {
-                Text("REGISTRARSE", color = Color.Black)
+
+            Image(
+                painter = painterResource(id = R.drawable.icono),
+                contentDescription = "Logo Jakawi Agro",
+                modifier = Modifier
+                    .size(120.dp)
+                    .padding(bottom = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                label = { Text("Nombre") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                label = { Text("Correo Electrónico") },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                label = { Text("Contraseña") },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                label = { Text("Confirmar Contraseña") },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = { clicked = !clicked },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .animateContentSize(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+            ) {
+                if (clicked) {
+                    Text("¡Registrado!", color = Color.Black)
+                } else {
+                    Text("REGISTRARSE", color = Color.Black)
+                }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "¿YA TE REGISTRASTE?",
+                color = Color(0xFF03A9F4),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    // Navegación a pantalla login
+                }
+            )
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "¿YA TE REGISTRASTE?",
-            color = Color(0xFF03A9F4),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.clickable {
-                // Navegación a login aquí
-            }
-        )
     }
 }
+

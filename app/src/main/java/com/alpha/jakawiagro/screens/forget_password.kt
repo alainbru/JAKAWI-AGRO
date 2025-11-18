@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,73 +38,78 @@ fun PasswordRecoveryPreview() {
     PasswordRecoveryScreen()
 }
 
-
 @Composable
 fun PasswordRecoveryScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFEDE7D5)) // Fondo claro
-            .padding(horizontal = 32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // 🌿 Logo (reemplaza con tu imagen)
-        Image(
-            painter = painterResource(id = com.alpha.jakawiagro.R.drawable.icono), // ← Tu logo aquí
-            contentDescription = "Logo Jakawi Agro",
+
+    Scaffold { paddingValues ->
+
+        Column(
             modifier = Modifier
-                .size(120.dp)
-                .padding(bottom = 8.dp)
-        )
-
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Ingrese su correo electrónico registrado en JAKAWI AGRO",
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // 📧 Campo de correo
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Correo Electrónico") },
-            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // ✅ Botón Recuperar
-        Button(
-            onClick = { /* Acción de recuperación */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                .fillMaxSize()
+                .background(Color(0xFFEDE7D5)) // Fondo claro
+                .padding(paddingValues)
+                .padding(horizontal = 32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("RECUPERAR", color = Color.White)
-        }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 🔗 Enlace para volver a iniciar sesión
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("¿Ya tienes una cuenta?")
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = "INICIAR SESIÓN",
-                color = Color(0xFF03A9F4),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { }
+            // 🌿 Logo
+            Image(
+                painter = painterResource(id = com.alpha.jakawiagro.R.drawable.icono),
+                contentDescription = "Logo Jakawi Agro",
+                modifier = Modifier
+                    .size(120.dp)
+                    .padding(bottom = 8.dp)
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Ingrese su correo electrónico registrado en JAKAWI AGRO",
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            // 📧 Campo de correo
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                label = { Text("Correo Electrónico") },
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // ✅ Botón Recuperar
+            Button(
+                onClick = { /* Acción de recuperación */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+            ) {
+                Text("RECUPERAR", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 🔗 Enlace para iniciar sesión
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("¿Ya tienes una cuenta?")
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "INICIAR SESIÓN",
+                    color = Color(0xFF03A9F4),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable { }
+                )
+            }
         }
     }
 }
+
