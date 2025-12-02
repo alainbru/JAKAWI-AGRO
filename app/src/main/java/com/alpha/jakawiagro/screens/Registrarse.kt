@@ -20,12 +20,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen()
+    JakawiAgroTheme {
+        RegisterScreen()
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +41,7 @@ fun RegisterScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFEDE7D5))
+                .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
@@ -57,8 +61,11 @@ fun RegisterScreen() {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                label = { Text("Nombre") },
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                label = { Text("Nombre")
+                },
+                leadingIcon = {  Icon(Icons.Default.Person,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary)  },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -68,7 +75,9 @@ fun RegisterScreen() {
                 value = "",
                 onValueChange = {},
                 label = { Text("Correo Electrónico") },
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Email,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -78,7 +87,9 @@ fun RegisterScreen() {
                 value = "",
                 onValueChange = {},
                 label = { Text("Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Lock,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -89,7 +100,9 @@ fun RegisterScreen() {
                 value = "",
                 onValueChange = {},
                 label = { Text("Confirmar Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Default.Lock,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -102,8 +115,10 @@ fun RegisterScreen() {
                     .fillMaxWidth()
                     .height(48.dp)
                     .animateContentSize(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
-            ) {
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )            ) {
                 if (clicked) {
                     Text("¡Registrado!", color = Color.Black)
                 } else {
@@ -115,7 +130,7 @@ fun RegisterScreen() {
 
             Text(
                 text = "¿YA TE REGISTRASTE?",
-                color = Color(0xFF03A9F4),
+                color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
                     // Navegación a pantalla login
