@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
+import androidx.compose.material3.VerticalDragHandleDefaults.shapes
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
 import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 @Preview(showBackground = true)
 @Composable
@@ -66,7 +68,9 @@ fun RegisterScreen() {
                 leadingIcon = {  Icon(Icons.Default.Person,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary)  },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -78,7 +82,9 @@ fun RegisterScreen() {
                 leadingIcon = { Icon(Icons.Default.Email,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -91,7 +97,9 @@ fun RegisterScreen() {
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary) },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -104,7 +112,9 @@ fun RegisterScreen() {
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary) },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium
+
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -112,10 +122,12 @@ fun RegisterScreen() {
             Button(
                 onClick = { clicked = !clicked },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.6f)
                     .height(48.dp)
                     .animateContentSize(),
-                colors = ButtonDefaults.buttonColors(
+                    shape = shapes.large,
+
+                        colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )            ) {
