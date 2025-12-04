@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
@@ -13,12 +14,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(
+    name = "TopAppBar Light",
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    showBackground = true
+)
+@Composable
+fun PreviewTopAppBarLight() {
+    JakawiAgroTheme {
+        MainTopAppBar()
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopAppBar(
-
     title: String = "Jakawi Agro",
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
@@ -27,7 +41,7 @@ fun MainTopAppBar(
         title = {
             Text(
                 text = title,
-                color = Color.Black // color del texto
+                color = MaterialTheme.colorScheme.onPrimary
             )
         },
         navigationIcon = {
@@ -35,7 +49,7 @@ fun MainTopAppBar(
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Menú",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         },
@@ -44,15 +58,16 @@ fun MainTopAppBar(
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Perfil",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFF8BC34A), // color de fondo
-            titleContentColor = Color.Black,
-            navigationIconContentColor = Color.Black,
-            actionIconContentColor = Color.Black
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
         )
     )
 }
+

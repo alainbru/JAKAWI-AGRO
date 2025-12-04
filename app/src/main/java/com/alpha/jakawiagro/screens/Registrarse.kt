@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +27,7 @@ import com.alpha.jakawiagro.ui.theme.shapes
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterScreenPreview() {
+fun RegisterScreenPreviewDark() {
     JakawiAgroTheme {
         RegisterScreen()
     }
