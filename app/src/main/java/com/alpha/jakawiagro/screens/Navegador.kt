@@ -19,7 +19,7 @@ import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     name = "TopAppBar Light",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
     showBackground = true
 )
 @Composable

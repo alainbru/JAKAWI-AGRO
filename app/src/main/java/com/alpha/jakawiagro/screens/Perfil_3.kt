@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,10 +27,7 @@ fun ConfiguracionCuenta(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFFBFD84E)
-    val buttonGreen = Color(0xFFDCE775)
-    val cardBg = Color(0xFFF9F6EC)
+    val colorScheme = MaterialTheme.colorScheme
 
     var notificaciones by remember { mutableStateOf(true) }
     var geolocalizacion by remember { mutableStateOf(true) }
@@ -36,34 +35,33 @@ fun ConfiguracionCuenta(
     var idiomaSeleccionado by remember { mutableStateOf("Español") }
 
     Scaffold(
+        containerColor = colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "CONFIGURACIONES",
                 onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
-        },
-        containerColor = greenBar
+        }
     ) { padding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
                 .padding(padding)
                 .padding(horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(Modifier.height(20.dp))
 
             Text(
                 text = "Ajusta tus preferencias de cuenta",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = Color(0xFF1B1B1B),
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp
-                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                color = colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
@@ -83,6 +81,7 @@ fun ConfiguracionCuenta(
                     onIdiomaSeleccionado = { idiomaSeleccionado = it }
                 )
             }
+
             ConfigCard {
                 ConfigSwitchItem(
                     label = "Geolocalización automática",
@@ -102,15 +101,14 @@ fun ConfiguracionCuenta(
             Spacer(Modifier.height(32.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = onGuardarClick,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = buttonGreen,
-                        contentColor = Color.Black
+                        containerColor = colorScheme.primary,
+                        contentColor = colorScheme.onPrimary
                     ),
                     modifier = Modifier.weight(1f)
                 ) {
@@ -123,7 +121,7 @@ fun ConfiguracionCuenta(
                     onClick = onVolverClick,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF333333)
+                        contentColor = colorScheme.primary
                     ),
                     modifier = Modifier.weight(1f)
                 ) {
@@ -136,24 +134,29 @@ fun ConfiguracionCuenta(
     }
 }
 
+
 @Composable
 fun ConfigCard(content: @Composable () -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp)
-            .shadow(4.dp, RoundedCornerShape(16.dp)),
+            .padding(vertical = 10.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F6EC))
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             content()
         }
     }
 }
+
 
 @Composable
 fun ConfigSwitchItem(
@@ -161,6 +164,8 @@ fun ConfigSwitchItem(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -168,22 +173,25 @@ fun ConfigSwitchItem(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.titleMedium.copy(
-                color = Color(0xFF1B1B1B),
-                fontWeight = FontWeight.Medium,
-                fontSize = 17.sp
-            )
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Medium,
+            fontSize = 17.sp,
+            color = colorScheme.onSurface
         )
+
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color(0xFF8BC34A),
-                checkedTrackColor = Color(0xFFAED581)
+                checkedThumbColor = colorScheme.primary,
+                checkedTrackColor = colorScheme.primaryContainer,
+                uncheckedThumbColor = colorScheme.outline,
+                uncheckedTrackColor = colorScheme.surfaceVariant
             )
         )
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -191,6 +199,7 @@ fun IdiomaSelector(
     idioma: String,
     onIdiomaSeleccionado: (String) -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -210,8 +219,10 @@ fun IdiomaSelector(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF8BC34A),
-                unfocusedBorderColor = Color(0xFFB0B0B0)
+                focusedBorderColor = colorScheme.primary,
+                unfocusedBorderColor = colorScheme.outline,
+                focusedLabelColor = colorScheme.primary,
+                cursorColor = colorScheme.primary
             )
         )
 
@@ -219,33 +230,24 @@ fun IdiomaSelector(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                text = { Text("Español") },
-                onClick = {
-                    onIdiomaSeleccionado("Español")
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Quechua") },
-                onClick = {
-                    onIdiomaSeleccionado("Quechua")
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Inglés") },
-                onClick = {
-                    onIdiomaSeleccionado("Inglés")
-                    expanded = false
-                }
-            )
+            listOf("Español", "Quechua", "Inglés").forEach {
+                DropdownMenuItem(
+                    text = { Text(it) },
+                    onClick = {
+                        onIdiomaSeleccionado(it)
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun PreviewConfiguracionCuenta() {
-    ConfiguracionCuenta()
+    JakawiAgroTheme {
+        ConfiguracionCuenta()
+    }
 }

@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -18,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +29,10 @@ fun PlanDeTrabajoScreen(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Scaffold(
+        containerColor = colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "Plan de trabajo",
@@ -37,12 +43,14 @@ fun PlanDeTrabajoScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddPlanClick,
-                containerColor = Color(0xFF56C7C1)
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.onPrimary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir cultivo")
             }
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -50,38 +58,65 @@ fun PlanDeTrabajoScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Seleccione la parcela", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text("Seleccionar todo")
 
-            // Tarjeta de ejemplo de parcela con imagen
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFF5F5DC), shape = RoundedCornerShape(12.dp))
-                    .padding(12.dp)
+            Text(
+                text = "Seleccione la parcela",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = colorScheme.onBackground
+            )
+
+            Text(
+                text = "Seleccionar todo",
+                style = MaterialTheme.typography.bodyMedium,
+                color = colorScheme.primary
+            )
+
+            // 🟩 Tarjeta de parcela
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = colorScheme.surfaceVariant
+                )
             ) {
                 Column(
+                    modifier = Modifier.padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // ✅ Imagen actualizada
+
                     Image(
                         painter = painterResource(id = R.drawable.img_parcela1),
                         contentDescription = "Imagen de parcela",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(150.dp),
+                            .height(150.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.Crop
                     )
 
-                    Text("Parcela 1", fontWeight = FontWeight.Bold, color = Color(0xFF4B7F52))
-                    Text("Descripción", color = Color.Gray)
+                    Text(
+                        text = "Parcela 1",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = "Descripción",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = colorScheme.onSurfaceVariant
+                    )
 
                     Button(
                         onClick = { /* acción añadir cultivo */ },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB7E0C1))
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorScheme.secondary,
+                            contentColor = colorScheme.onSecondary
+                        )
                     ) {
-                        Text("Añadir Plan de Trabajo", color = Color.Black)
+                        Text("Añadir Plan de Trabajo")
                     }
                 }
             }
@@ -89,8 +124,10 @@ fun PlanDeTrabajoScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewPlanDeTrabajoScreen() {
-    PlanDeTrabajoScreen(onAddPlanClick = {})
+fun PreviewPlanDeTrabajo() {
+    JakawiAgroTheme {
+        PlanDeTrabajoScreen(onAddPlanClick = {})
+    }
 }

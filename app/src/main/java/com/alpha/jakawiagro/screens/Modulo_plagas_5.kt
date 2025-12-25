@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,31 +39,28 @@ fun ModuloPlagasFicha(
     onRegistrarClick: () -> Unit = {},
     onAtrasClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val panelBg = Color(0xFFF5F7F2)
-    val panelBorder = Color(0xFFE1E5DA)
-    val mint = Color(0xFF78D9AE)
-    val darkBtn = Color(0xFF2E3C30)
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(
         topBar = {
             MainTopAppBar(
-                title = "FICHA TECNICA",
+                title = "FICHA TÉCNICA",
                 onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = colors.primary
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(colors.background)
                 .padding(padding)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(Modifier.height(12.dp))
 
             Column(
@@ -69,13 +68,19 @@ fun ModuloPlagasFicha(
                     .fillMaxWidth()
                     .widthIn(max = 360.dp)
             ) {
+
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = panelBg),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colors.surface
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, panelBorder, RoundedCornerShape(16.dp))
+                        .border(
+                            1.dp,
+                            colors.outline,
+                            RoundedCornerShape(16.dp)
+                        ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
                         modifier = Modifier
@@ -95,9 +100,8 @@ Factores que afectan su salud:
 • Prácticas de manejo: El control de malezas, el pisoteo por ganado y el uso de herbicidas pueden afectar su regeneración natural.
                             """.trimIndent(),
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 14.sp,
                                 lineHeight = 20.sp,
-                                color = Color(0xFF1E1E1E)
+                                color = colors.onSurface
                             )
                         )
                     }
@@ -107,41 +111,35 @@ Factores que afectan su salud:
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+
                     Button(
                         onClick = onRegistrarClick,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = darkBtn,
-                            contentColor = Color.White
+                            containerColor = colors.primaryContainer,
+                            contentColor = colors.onPrimaryContainer
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "Registrar"
-                        )
-                        Spacer(Modifier.width(9.dp))
+                        Icon(Icons.Filled.Edit, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
                         Text(
-                            "REGISTRAR EN\nPARCELA",
+                            "REGISTRAR\nPARCELA",
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                letterSpacing = 0.4.sp
-                            )
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
                         )
                     }
 
                     Button(
                         onClick = onAtrasClick,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = mint,
-                            contentColor = Color.Black
+                            containerColor = colors.secondaryContainer,
+                            contentColor = colors.onSecondaryContainer
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
@@ -149,16 +147,11 @@ Factores que afectan su salud:
                             .height(48.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Atrás"
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
                         )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            "ATRAS",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("ATRÁS", fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -168,8 +161,15 @@ Factores que afectan su salud:
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 @Composable
-fun PreviewModuloPlagasFicha() {
-    ModuloPlagasFicha()
+fun PreviewModuloPlagasFichaDark() {
+    JakawiAgroTheme {
+        ModuloPlagasFicha()
+    }
 }

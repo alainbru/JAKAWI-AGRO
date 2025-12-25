@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,10 +29,7 @@ fun EditarPerfil(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFFBFD84E)
-    val buttonGreen = Color(0xFFDCE775)
-    val cardBg = Color(0xFFF9F6EC)
+    val colorScheme = MaterialTheme.colorScheme
 
     var nombre by remember { mutableStateOf("Juan") }
     var apellido by remember { mutableStateOf("Pérez Condori") }
@@ -39,52 +38,48 @@ fun EditarPerfil(
     var dni by remember { mutableStateOf("12345678") }
 
     Scaffold(
+        containerColor = colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "EDITAR PERFIL",
                 onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
-        },
-        containerColor = greenBar
+        }
     ) { padding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
                 .padding(padding)
                 .padding(horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(Modifier.height(20.dp))
 
             Text(
                 text = "Actualiza tu información personal",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = Color(0xFF1B1B1B),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
             Spacer(Modifier.height(24.dp))
 
-            // ===== Campos con estilo mejorado =====
             PerfilInputCard(
                 label = "Nombre",
                 value = nombre,
-                onValueChange = { nombre = it },
-                keyboardType = KeyboardType.Text
+                onValueChange = { nombre = it }
             )
 
             PerfilInputCard(
                 label = "Apellido",
                 value = apellido,
-                onValueChange = { apellido = it },
-                keyboardType = KeyboardType.Text
+                onValueChange = { apellido = it }
             )
 
             PerfilInputCard(
@@ -110,28 +105,24 @@ fun EditarPerfil(
 
             Spacer(Modifier.height(32.dp))
 
-            // ===== Botones =====
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+
                 Button(
                     onClick = onGuardarClick,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = buttonGreen,
-                        contentColor = Color.Black
+                        containerColor = colorScheme.primary,
+                        contentColor = colorScheme.onPrimary
                     ),
                     modifier = Modifier
                         .weight(1f)
                         .height(50.dp)
-                        .shadow(4.dp, RoundedCornerShape(14.dp))
                 ) {
                     Text(
                         "GUARDAR CAMBIOS",
-                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -141,7 +132,7 @@ fun EditarPerfil(
                     onClick = onCancelarClick,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF333333)
+                        contentColor = colorScheme.primary
                     ),
                     modifier = Modifier
                         .weight(1f)
@@ -149,9 +140,9 @@ fun EditarPerfil(
                 ) {
                     Text(
                         "CANCELAR",
-                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -161,6 +152,7 @@ fun EditarPerfil(
     }
 }
 
+
 // ===== Campo de texto dentro de una tarjeta con sombra =====
 @Composable
 fun PerfilInputCard(
@@ -169,13 +161,17 @@ fun PerfilInputCard(
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .shadow(3.dp, RoundedCornerShape(16.dp)),
+            .padding(vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F6EC))
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         OutlinedTextField(
             value = value,
@@ -188,17 +184,22 @@ fun PerfilInputCard(
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF8BC34A),
-                unfocusedBorderColor = Color(0xFFB0B0B0),
-                focusedLabelColor = Color(0xFF558B2F),
-                cursorColor = Color(0xFF558B2F)
+                focusedBorderColor = colorScheme.primary,
+                unfocusedBorderColor = colorScheme.outline,
+                focusedLabelColor = colorScheme.primary,
+                cursorColor = colorScheme.primary,
+                focusedTextColor = colorScheme.onSurface,
+                unfocusedTextColor = colorScheme.onSurface
             )
         )
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun PreviewEditarPerfil() {
-    EditarPerfil()
+    JakawiAgroTheme {
+        EditarPerfil()
+    }
 }

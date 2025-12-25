@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,41 +30,37 @@ fun HistorialPersonal(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFFBFD84E)
-    val buttonGreen = Color(0xFFDCE775)
-    val cardBg = Color(0xFFF9F6EC)
+    val colorScheme = MaterialTheme.colorScheme
 
     Scaffold(
+        containerColor = colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "HISTORIAL",
                 onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
-        },
-        containerColor = greenBar
+        }
     ) { padding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
                 .padding(padding)
                 .padding(horizontal = 24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(Modifier.height(20.dp))
 
             Text(
                 text = "Resumen de tus actividades",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    color = Color(0xFF1B1B1B),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                ),
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                color = colorScheme.onBackground
             )
 
             Spacer(Modifier.height(30.dp))
@@ -70,26 +68,25 @@ fun HistorialPersonal(
             HistorialItem(
                 icono = R.drawable.icono_parcelas,
                 valor = "12",
-                descripcion = "Parcelas registradas",
-                backgroundColor = cardBg
+                descripcion = "Parcelas registradas"
             )
+
             HistorialItem(
                 icono = R.drawable.icono_plagas,
                 valor = "6",
-                descripcion = "Plagas detectadas",
-                backgroundColor = cardBg
+                descripcion = "Plagas detectadas"
             )
+
             HistorialItem(
                 icono = R.drawable.icono_asistencia,
                 valor = "21",
-                descripcion = "Asistencias completadas",
-                backgroundColor = cardBg
+                descripcion = "Asistencias completadas"
             )
+
             HistorialItem(
                 icono = R.drawable.icono_calendario,
                 valor = "Hoy a las 16:30",
-                descripcion = "Última actividad",
-                backgroundColor = cardBg
+                descripcion = "Última actividad"
             )
 
             Spacer(Modifier.height(40.dp))
@@ -98,23 +95,23 @@ fun HistorialPersonal(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+
                 Button(
                     onClick = onExportarClick,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = buttonGreen,
-                        contentColor = Color.Black
+                        containerColor = colorScheme.primary,
+                        contentColor = colorScheme.onPrimary
                     ),
                     modifier = Modifier
                         .weight(1f)
                         .height(50.dp)
-                        .shadow(4.dp, RoundedCornerShape(14.dp))
                 ) {
                     Text(
-                        "EXPORTAR DATOS",
-                        textAlign = TextAlign.Center,
+                        text = "EXPORTAR DATOS",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -124,17 +121,17 @@ fun HistorialPersonal(
                     onClick = onVolverClick,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF333333)
+                        contentColor = colorScheme.primary
                     ),
                     modifier = Modifier
                         .weight(1f)
                         .height(50.dp)
                 ) {
                     Text(
-                        "VOLVER",
-                        textAlign = TextAlign.Center,
+                        text = "VOLVER",
                         fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -144,28 +141,32 @@ fun HistorialPersonal(
     }
 }
 
+
 @Composable
 fun HistorialItem(
     icono: Int,
     valor: String,
-    descripcion: String,
-    backgroundColor: Color
+    descripcion: String
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .shadow(3.dp, RoundedCornerShape(16.dp)),
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            verticalAlignment = Alignment.CenterVertically
         ) {
+
             Image(
                 painter = painterResource(id = icono),
                 contentDescription = descripcion,
@@ -177,26 +178,27 @@ fun HistorialItem(
             Column {
                 Text(
                     text = valor,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = Color(0xFF1B1B1B)
-                    )
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = colorScheme.onSurface
                 )
+
                 Text(
                     text = descripcion,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color(0xFF4F4F4F),
-                        fontSize = 14.sp
-                    )
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 14.sp,
+                    color = colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewHistorialPersonal() {
-    HistorialPersonal()
+fun PreviewHistorial() {
+    JakawiAgroTheme {
+        HistorialPersonal()
+    }
 }

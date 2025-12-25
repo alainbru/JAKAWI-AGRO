@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,11 +35,7 @@ fun ModuloPlagasRegistro(
     onAsignarTareaClick: () -> Unit = {},
     onAtrasClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFFA6E6C9)
-    val deepGreen = Color(0xFF2F7261)
-    val mintBtn = Color(0xFF78D9AE)
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(
         topBar = {
@@ -47,15 +45,15 @@ fun ModuloPlagasRegistro(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = colors.primary
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(colors.background)
                 .padding(padding)
         ) {
-            // Contenido
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -64,32 +62,35 @@ fun ModuloPlagasRegistro(
                     .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Icon(
                     imageVector = Icons.Filled.Check,
-                    tint = deepGreen,
+                    tint = colors.primary,
                     contentDescription = "Éxito",
                     modifier = Modifier.size(48.dp)
                 )
+
                 Spacer(Modifier.height(8.dp))
+
                 Text(
                     text = "Plaga registrada\nen $parcelaNombre",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 22.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF1C3A31),
                         lineHeight = 28.sp
-                    )
+                    ),
+                    color = colors.onBackground
                 )
 
                 Spacer(Modifier.height(20.dp))
 
-                // Botón: Ver historial (menta claro)
+                // Botón: Ver historial
                 Button(
                     onClick = onVerHistorialClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = mint,
-                        contentColor = Color.Black
+                        containerColor = colors.secondaryContainer,
+                        contentColor = colors.onSecondaryContainer
                     ),
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
@@ -98,18 +99,20 @@ fun ModuloPlagasRegistro(
                 ) {
                     Text(
                         "Ver historial",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
                     )
                 }
 
                 Spacer(Modifier.height(12.dp))
 
-                // Botón: Asignar tarea (verde oscuro)
+                // Botón: Asignar tarea
                 Button(
                     onClick = onAsignarTareaClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = deepGreen,
-                        contentColor = Color.White
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
                     ),
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
@@ -118,16 +121,19 @@ fun ModuloPlagasRegistro(
                 ) {
                     Text(
                         "Asignar tarea",
-                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
                     )
                 }
             }
 
+            // Botón ATRÁS
             Button(
                 onClick = onAtrasClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = mintBtn,
-                    contentColor = Color.Black
+                    containerColor = colors.tertiaryContainer,
+                    contentColor = colors.onTertiaryContainer
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -140,14 +146,24 @@ fun ModuloPlagasRegistro(
                     contentDescription = "Atrás"
                 )
                 Spacer(Modifier.width(8.dp))
-                Text("ATRAS")
+                Text("ATRÁS")
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    name = "Modulo Plagas Registro - Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    showSystemUi = true
+)
 @Composable
-fun PreviewModuloPlagas() {
-    ModuloPlagasRegistro()
+fun PreviewModuloPlagasRegistroDark() {
+    JakawiAgroTheme {
+        ModuloPlagasRegistro(
+            parcelaNombre = "Parcela 1"
+        )
+    }
 }
