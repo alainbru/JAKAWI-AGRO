@@ -1,29 +1,35 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,10 +38,12 @@ fun ModuloPlagasEjemplo(
     onProfileClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val frameGray = Color(0xFF666666)
-    val mint = Color(0xFF78D9AE)
+    // 🎨 Colores desde el theme (dark / light friendly)
+    val background = MaterialTheme.colorScheme.background
+    val topBarColor = MaterialTheme.colorScheme.primary
+    val frameColor = MaterialTheme.colorScheme.outline
+    val actionButton = MaterialTheme.colorScheme.secondaryContainer
+    val actionText = MaterialTheme.colorScheme.onSecondaryContainer
 
     Scaffold(
         topBar = {
@@ -45,12 +53,12 @@ fun ModuloPlagasEjemplo(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = topBarColor
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(background)
                 .padding(padding)
         ) {
 
@@ -61,11 +69,17 @@ fun ModuloPlagasEjemplo(
                     .fillMaxWidth(0.8f),
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
             ) {
                 Box(
                     modifier = Modifier
-                        .border(width = 6.dp, color = frameGray, shape = RoundedCornerShape(16.dp))
+                        .border(
+                            width = 4.dp,
+                            color = frameColor,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                         .padding(8.dp)
                 ) {
                     Image(
@@ -83,8 +97,8 @@ fun ModuloPlagasEjemplo(
             Button(
                 onClick = onBackClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = mint,
-                    contentColor = Color.Black
+                    containerColor = actionButton,
+                    contentColor = actionText
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
@@ -92,19 +106,29 @@ fun ModuloPlagasEjemplo(
                     .padding(16.dp)
                     .height(44.dp)
             ) {
-                androidx.compose.material3.Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Volver"
                 )
                 Spacer(Modifier.width(8.dp))
-                Text("ATRAS")
+                Text(
+                    text = "ATRÁS",
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(
+    name = "Modulo Plagas Ejemplo",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 @Composable
-fun PreviewModuloPlagasEjemplo() {
-    ModuloPlagasEjemplo()
+fun PreviewModuloPlagasEjemploDark() {
+    JakawiAgroTheme {
+        ModuloPlagasEjemplo()
+    }
 }

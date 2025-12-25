@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,9 +29,7 @@ fun ModuloPlagas1(
     onProfileClick: () -> Unit = {},
     onNextClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val greenCard = Color(0xFF78D9AE)
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(
         topBar = {
@@ -40,12 +39,12 @@ fun ModuloPlagas1(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = colors.primary
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(colors.background)
                 .padding(padding)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
@@ -69,7 +68,7 @@ fun ModuloPlagas1(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF1B1B1B)
+                    color = colors.onBackground
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -80,7 +79,7 @@ fun ModuloPlagas1(
             Text(
                 text = "Ten en cuenta los siguientes pasos:",
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFF3B3B3B)
+                    color = colors.onBackground.copy(alpha = 0.7f)
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -90,10 +89,9 @@ fun ModuloPlagas1(
 
             // ===== SECCIÓN: Tarjeta con pasos =====
             Card(
-                colors = CardDefaults.cardColors(containerColor = greenCard),
+                colors = CardDefaults.cardColors(containerColor = colors.secondaryContainer),
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.92f)
+                modifier = Modifier.fillMaxWidth(0.92f)
             ) {
                 Column(
                     modifier = Modifier
@@ -109,7 +107,6 @@ fun ModuloPlagas1(
                     )
 
                     PasoItemImagen(
-
                         drawableRes = R.drawable.icono_camara,
                         texto = "Toma una foto clara"
                     )
@@ -132,8 +129,8 @@ fun ModuloPlagas1(
                 onClick = onNextClick,
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF98BFA5),
-                    contentColor = Color.Black
+                    containerColor = colors.secondary,
+                    contentColor = colors.onSecondary
                 )
             ) {
                 Text("SIGUIENTE")
@@ -146,19 +143,19 @@ fun ModuloPlagas1(
     }
 }
 
-
 @Composable
 fun PasoItemImagen(
     drawableRes: Int,
     texto: String
 ) {
+    val colors = MaterialTheme.colorScheme
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+        modifier = Modifier.fillMaxWidth()
 
+    ) {
         Image(
             painter = painterResource(id = drawableRes),
             contentDescription = null,
@@ -169,18 +166,23 @@ fun PasoItemImagen(
             text = texto,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF103B2B)
+                color = colors.onSecondaryContainer
             ),
             textAlign = TextAlign.Center
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark Mode"
+)
 @Composable
-fun PreviewPlagas1() {
-    ModuloPlagas1()
+fun ModuloPlagas1Preview() {
+    JakawiAgroTheme {
+        ModuloPlagas1()
+    }
 }
-
 
 

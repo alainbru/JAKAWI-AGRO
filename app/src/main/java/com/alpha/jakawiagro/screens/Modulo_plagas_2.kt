@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +41,15 @@ fun ModuloPlagasFoto(
     onSubirFotoClick: () -> Unit = {},
     onVerEjemploClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val mintLight = Color(0xFFA6E6C9)
+    val darkTheme = isSystemInDarkTheme()
+
+    // Colores adaptativos
+    val beige = if (darkTheme) Color(0xFF2C2C2C) else Color(0xFFF1EAD9)
+    val greenBar = if (darkTheme) Color(0xFF33691E) else Color(0xFF8BC34A)
+    val mint = if (darkTheme) Color(0xFF4CAF88) else Color(0xFF78D9AE)
+    val mintLight = if (darkTheme) Color(0xFF558B7A) else Color(0xFFA6E6C9)
+    val textColor = if (darkTheme) Color.White else Color(0xFF1B1B1B)
+    val buttonContentColor = if (darkTheme) Color.White else Color(0xFF0A2F24)
 
     Scaffold(
         topBar = {
@@ -83,7 +90,7 @@ fun ModuloPlagasFoto(
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF1B1B1B),
+                        color = textColor,
                         lineHeight = 26.sp
                     ),
                     textAlign = TextAlign.Center
@@ -108,6 +115,7 @@ fun ModuloPlagasFoto(
                             iconRes = R.drawable.icono_camara,
                             text = "TOMAR FOTO",
                             containerColor = mint,
+                            contentColor = buttonContentColor,
                             onClick = onTomarFotoClick
                         )
 
@@ -117,6 +125,7 @@ fun ModuloPlagasFoto(
                             iconRes = R.drawable.icono_subir,
                             text = "SUBIR FOTO",
                             containerColor = mint,
+                            contentColor = buttonContentColor,
                             onClick = onSubirFotoClick
                         )
                     }
@@ -128,10 +137,9 @@ fun ModuloPlagasFoto(
                     text = "VER EJEMPLO",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF1B1B1B),
+                        color = textColor,
                         letterSpacing = 0.5.sp
                     ),
-
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,13 +155,14 @@ fun AccionFotoButton(
     iconRes: Int,
     text: String,
     containerColor: Color,
+    contentColor: Color,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = Color(0xFF0A2F24)
+            contentColor = contentColor
         ),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
@@ -165,7 +174,6 @@ fun AccionFotoButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-
                 painter = painterResource(id = iconRes),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
@@ -185,7 +193,6 @@ fun AccionFotoButton(
     }
 }
 
-
 fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
     clickable(
         indication = null,
@@ -194,9 +201,14 @@ fun Modifier.clickableNoRipple(onClick: () -> Unit): Modifier = composed {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark Mode"
+)
 @Composable
-fun PreviewModuloPlagasFoto() {
-    ModuloPlagasFoto()
+fun ModuloPlagasFotoPreview() {
+    JakawiAgroTheme {
+        ModuloPlagasFoto()
+    }
 }
-

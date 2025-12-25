@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,10 +31,7 @@ fun ModuloPlagasResultado(
     onDetectarClick: () -> Unit = {},
     onRetomarFotoClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val frameGray = Color(0xFF666666)
-    val mint = Color(0xFF78D9AE)
+    val colors = MaterialTheme.colorScheme
 
     Scaffold(
         topBar = {
@@ -42,15 +41,17 @@ fun ModuloPlagasResultado(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = colors.primary
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(colors.background)
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(Modifier.height(70.dp))
 
             Column(
@@ -60,10 +61,15 @@ fun ModuloPlagasResultado(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(6.dp, frameGray, RoundedCornerShape(16.dp))
+                        .border(
+                            width = 4.dp,
+                            color = colors.outline,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                         .padding(8.dp)
                 ) {
                     Image(
@@ -77,41 +83,44 @@ fun ModuloPlagasResultado(
                     )
                 }
 
-                Spacer(Modifier.height(14.dp))
+                Spacer(Modifier.height(16.dp))
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
-                        .background(Color(0x22000000))
+                Divider(
+                    color = colors.outlineVariant,
+                    thickness = 1.dp
                 )
 
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(14.dp))
 
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0x14000000)),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colors.surfaceVariant
+                    ),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
-                        horizontalArrangement = spacedBy(12.dp),
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
                         AccionIconButton(
                             iconRes = R.drawable.icono_busqueda,
                             text = "DETECTAR",
-                            containerColor = mint,
+                            containerColor = colors.primaryContainer,
+                            contentColor = colors.onPrimaryContainer,
                             onClick = onDetectarClick,
                             modifier = Modifier.weight(1f)
                         )
+
                         AccionIconButton(
                             iconRes = R.drawable.icono_camara,
                             text = "VOLVER A\nTOMAR FOTO",
-                            containerColor = mint,
+                            containerColor = colors.secondaryContainer,
+                            contentColor = colors.onSecondaryContainer,
                             onClick = onRetomarFotoClick,
                             twoLines = true,
                             modifier = Modifier.weight(1f)
@@ -125,12 +134,13 @@ fun ModuloPlagasResultado(
     }
 }
 
-/** Botón con icono a la izquierda y texto centrado (igual). */
+
 @Composable
 fun AccionIconButton(
     iconRes: Int,
     text: String,
     containerColor: Color,
+    contentColor: Color,
     onClick: () -> Unit,
     twoLines: Boolean = false,
     modifier: Modifier = Modifier
@@ -139,7 +149,7 @@ fun AccionIconButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = Color.Black
+            contentColor = contentColor
         ),
         shape = RoundedCornerShape(12.dp),
         contentPadding = PaddingValues(horizontal = 12.dp),
@@ -158,11 +168,9 @@ fun AccionIconButton(
             Text(
                 text = text,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.4.sp,
-                    fontSize = if (twoLines) 12.sp else 14.sp
-                ),
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp,
+                fontSize = if (twoLines) 12.sp else 14.sp,
                 modifier = Modifier.weight(1f)
             )
             Spacer(Modifier.width(20.dp))
@@ -170,9 +178,15 @@ fun AccionIconButton(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewModuloPlagasResultado() {
-    ModuloPlagasResultado()
-}
 
+@Preview(
+    name = "Modulo Plagas Resultado",
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    showBackground = true
+)
+@Composable
+fun PreviewModuloPlagasResultadoDark() {
+    JakawiAgroTheme {
+        ModuloPlagasResultado()
+    }
+}

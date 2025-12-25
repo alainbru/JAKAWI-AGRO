@@ -19,10 +19,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,9 +37,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
-fun Agregar_parcela() {
+fun AgregarParcela() {
+    val colors = MaterialTheme.colorScheme
+
     Scaffold(
         topBar = {
             MainTopAppBar(
@@ -56,7 +61,7 @@ fun Agregar_parcela() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // Imagen de previsualización (desde drawable)
+                // Imagen de previsualización
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -68,11 +73,11 @@ fun Agregar_parcela() {
                         modifier = Modifier
                             .matchParentSize()
                             .clip(RoundedCornerShape(12.dp))
-                            .border(1.dp, Color.Gray, RoundedCornerShape(12.dp)),
+                            .border(1.dp, colors.outline, RoundedCornerShape(12.dp)),
                         contentScale = ContentScale.Crop
                     )
 
-                    // 🖊️ Botón flotante encima de la imagen
+                    // Botón flotante encima de la imagen
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -84,99 +89,110 @@ fun Agregar_parcela() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-// 📝 Campo: Tipo Forraje o Cultivo
+                // Tipo Forraje o Cultivo
                 Text(
                     text = "Tipo Forraje o Cultivo",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Start, //
-
-                    modifier = Modifier
-                        .padding(bottom = 4.dp)
-                        .fillMaxWidth() //
-                        .padding(bottom = 4.dp)
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = colors.onBackground
+                    ),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
                 )
 
                 TextField(
                     value = "",
                     onValueChange = {},
                     placeholder = { Text("Ingrese el tipo...") },
-                    enabled = false, // Solo previsualización
+                    enabled = false,
+
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(8.dp))
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Medida
                 Text(
                     text = "Medida",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                    textAlign = TextAlign.Start, //
-
-                    modifier = Modifier.
-                    padding(bottom = 4.dp)
-                        .fillMaxWidth() //
-
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = colors.onBackground
+                    ),
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
                 )
 
                 TextField(
                     value = "",
                     onValueChange = {},
                     placeholder = { Text("Ingrese la medida...") },
-                    enabled = false, // Solo previsualización
+                    enabled = false,
+
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(8.dp))
                 )
 
-                // Botones sin funcionalidad aún
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botones
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {Button(
-                    onClick = { /* TODO: Añadir funcionalidad */ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4CAF50), // 💚 Verde
-                        contentColor = Color.White          // 🏷 Texto blanco
-                    )
                 ) {
-                    Text("AÑADIR")
-                }
+                    val buttonColor = colors.primary
+                    val contentColor = colors.onPrimary
+
+                    Button(
+                        onClick = { /* TODO: Añadir funcionalidad */ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = buttonColor,
+                            contentColor = contentColor
+                        )
+                    ) {
+                        Text("AÑADIR")
+                    }
 
                     Button(
                         onClick = { /* TODO: Modificar funcionalidad */ },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50), // 💚 Verde
-                            contentColor = Color.White
+                            containerColor = buttonColor,
+                            contentColor = contentColor
                         )
                     ) {
                         Text("MODIFICAR")
                     }
                 }
-                }
-
+            }
         }
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewAgregarParcela() {
-    MaterialTheme {
-        Agregar_parcela()
-    }
-}
-
 @Composable
 fun BotonFlotanteEditar(onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     FloatingActionButton(
         onClick = onClick,
-        containerColor = Color(0xFF4CAF50), // 💚 verde
-        contentColor = Color.White
+        containerColor = colors.primary,
+        contentColor = colors.onPrimary
     ) {
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = "Editar",
-            tint = Color.White
+            tint = colors.onPrimary
         )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark Mode"
+)
+@Composable
+fun PreviewAgregarParcela() {
+    JakawiAgroTheme {
+        AgregarParcela()
     }
 }

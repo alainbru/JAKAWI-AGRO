@@ -12,9 +12,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
 fun VistaParcelas() {
+    val colors = MaterialTheme.colorScheme
+
     Scaffold(
         topBar = {
             MainTopAppBar(
@@ -25,7 +28,7 @@ fun VistaParcelas() {
         },
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = colors.surface
             ) {
                 Row(
                     modifier = Modifier
@@ -33,11 +36,14 @@ fun VistaParcelas() {
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
+                    val buttonColor = colors.primary
+                    val contentColor = colors.onPrimary
+
                     Button(
                         onClick = { /* sin funcionalidad aún */ },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50), // 💚 Verde
-                            contentColor = Color.White          // 🤍 Texto blanco
+                            containerColor = buttonColor,
+                            contentColor = contentColor
                         )
                     ) {
                         Text("EDITAR")
@@ -46,8 +52,8 @@ fun VistaParcelas() {
                     Button(
                         onClick = { /* sin funcionalidad aún */ },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50),
-                            contentColor = Color.White
+                            containerColor = buttonColor,
+                            contentColor = contentColor
                         )
                     ) {
                         Text("AGREGAR")
@@ -56,13 +62,12 @@ fun VistaParcelas() {
                     Button(
                         onClick = { /* sin funcionalidad aún */ },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50),
-                            contentColor = Color.White
+                            containerColor = buttonColor,
+                            contentColor = contentColor
                         )
                     ) {
                         Text("ELIMINAR")
                     }
-
                 }
             }
         }
@@ -74,25 +79,25 @@ fun VistaParcelas() {
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
-            // Imagen de fondo (puedes reemplazar con painterResource si es local)
             Image(
                 painter = painterResource(id = R.drawable.mapa_parcela),
                 contentDescription = "Vista satelital predial",
-                modifier = Modifier
-
-                    .fillMaxSize(), // 🔹 Usa todo el espacio disponible
-
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO,
+    name = "Dark Mode"
+)
 @Composable
-fun PreviewVistaParcelas() {
-    MaterialTheme {
+fun VistaParcelasPreview() {
+    JakawiAgroTheme {
         VistaParcelas()
     }
 }
+
