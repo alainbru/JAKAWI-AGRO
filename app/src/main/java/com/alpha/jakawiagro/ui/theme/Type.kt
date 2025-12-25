@@ -7,8 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.test.espresso.base.Default
-import com.alpha.jakawiagro.R  // Solo importa TU R, no el de material3
+import com.alpha.jakawiagro.R
 
 
 

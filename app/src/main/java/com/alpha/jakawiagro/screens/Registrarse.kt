@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.material3.VerticalDragHandleDefaults.shapes
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,13 +24,16 @@ import com.alpha.jakawiagro.R
 import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 import com.alpha.jakawiagro.ui.theme.shapes
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun RegisterScreenPreviewDark() {
     JakawiAgroTheme {
         RegisterScreen()
     }
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
