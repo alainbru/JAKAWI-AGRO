@@ -1,5 +1,6 @@
 package com.alpha.jakawiagro.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -18,6 +20,8 @@ fun NuevoPlanDeTrabajoScreen(
     onProfileClick: () -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+
     var nombre by remember { mutableStateOf("") }
     var tipo by remember { mutableStateOf("") }
     var variedad by remember { mutableStateOf("") }
@@ -27,6 +31,7 @@ fun NuevoPlanDeTrabajoScreen(
     var objetivo by remember { mutableStateOf("") }
 
     Scaffold(
+        containerColor = colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "Nuevo plan de trabajo",
@@ -35,6 +40,7 @@ fun NuevoPlanDeTrabajoScreen(
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,67 +48,108 @@ fun NuevoPlanDeTrabajoScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
                 label = { Text("Nombre del Plan de Trabajo") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary,
+                    cursorColor = colorScheme.primary
+                )
             )
 
             OutlinedTextField(
                 value = tipo,
                 onValueChange = { tipo = it },
                 label = { Text("Tipo de forraje o cultivo") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary
+                )
             )
 
             OutlinedTextField(
                 value = variedad,
                 onValueChange = { variedad = it },
                 label = { Text("Variedad") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary
+                )
             )
 
             Text(
-                text = "Año de cosecha",
+                text = "Periodo de cosecha",
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 4.dp)
+                color = colorScheme.onSurface
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
+
                 RadioButton(
                     selected = periodo == "Verano Andino",
-                    onClick = { periodo = "Verano Andino" }
+                    onClick = { periodo = "Verano Andino" },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = colorScheme.primary
+                    )
                 )
-                Text("Verano Andino")
-                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Verano Andino",
+                    color = colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
                 RadioButton(
                     selected = periodo == "Invierno Andino",
-                    onClick = { periodo = "Invierno Andino" }
+                    onClick = { periodo = "Invierno Andino" },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = colorScheme.primary
+                    )
                 )
-                Text("Invierno Andino")
+                Text(
+                    text = "Invierno Andino",
+                    color = colorScheme.onSurface
+                )
             }
 
             OutlinedTextField(
                 value = anioCosecha,
                 onValueChange = { anioCosecha = it },
                 label = { Text("Año de cosecha") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary
+                )
             )
 
             OutlinedTextField(
                 value = destino,
                 onValueChange = { destino = it },
                 label = { Text("Destino (Consumo o venta)") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary
+                )
             )
 
             OutlinedTextField(
                 value = objetivo,
                 onValueChange = { objetivo = it },
                 label = { Text("Objetivo") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colorScheme.primary,
+                    focusedLabelColor = colorScheme.primary
+                )
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -112,16 +159,25 @@ fun NuevoPlanDeTrabajoScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF56C7C1))
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorScheme.primary,
+                    contentColor = colorScheme.onPrimary
+                )
             ) {
-                Text("Crear plan de trabajo", fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(
+                    text = "Crear plan de trabajo",
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewNuevoPlanDeTrabajoScreen() {
-    NuevoPlanDeTrabajoScreen()
+fun PreviewNuevoPlan() {
+    JakawiAgroTheme {
+        NuevoPlanDeTrabajoScreen()
+    }
 }
