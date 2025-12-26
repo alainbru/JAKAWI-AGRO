@@ -22,22 +22,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 @Composable
 fun AsistenciaCalendario() {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val text = Color(0xFF21342C)
+    val mint = MaterialTheme.colorScheme.secondaryContainer
+    val textColor = MaterialTheme.colorScheme.onBackground
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val primaryBar = MaterialTheme.colorScheme.primary
+    val selectedDayColor = MaterialTheme.colorScheme.primaryContainer
 
     Scaffold(
         topBar = { MainTopAppBar("ASISTENCIA") },
-        containerColor = greenBar
+        containerColor = primaryBar
     ) { p ->
         Column(
             Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(backgroundColor)
                 .padding(p)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -46,12 +49,17 @@ fun AsistenciaCalendario() {
                 "CALENDARIO\nAGRICOLA",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium.copy(
-                    fontSize = 22.sp, letterSpacing = 2.sp, lineHeight = 28.sp,
-                    fontWeight = FontWeight.SemiBold, color = text
+                    fontSize = 22.sp,
+                    letterSpacing = 2.sp,
+                    lineHeight = 28.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = textColor
                 )
             )
             Spacer(Modifier.height(16.dp))
+
             Column(Modifier.widthIn(max = 360.dp)) {
+                // Días de la semana
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                     listOf("LU","MA","MI","JU","VI","SA","DO").forEach {
                         Text(
@@ -59,23 +67,25 @@ fun AsistenciaCalendario() {
                             modifier = Modifier.width(32.dp),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelMedium.copy(
-                                fontWeight = FontWeight.Bold, color = text
+                                fontWeight = FontWeight.Bold,
+                                color = textColor
                             )
                         )
                     }
                 }
                 Spacer(Modifier.height(8.dp))
 
+                // Calendario
                 var d = 0
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                     repeat(2) { Box(Modifier.width(32.dp).height(28.dp)) }
-                    repeat(5) { d++; Day(d, selected = d == 10, textColor = text) }
+                    repeat(5) { d++; Day(d, selected = d == 10, selectedColor = selectedDayColor, textColor = textColor) }
                 }
                 Spacer(Modifier.height(6.dp))
                 repeat(5) {
                     Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                         repeat(7) {
-                            if (d < 31) { d++; Day(d, selected = d == 10, textColor = text) }
+                            if (d < 31) { d++; Day(d, selected = d == 10, selectedColor = selectedDayColor, textColor = textColor) }
                             else Box(Modifier.width(32.dp).height(28.dp))
                         }
                     }
@@ -84,6 +94,7 @@ fun AsistenciaCalendario() {
             }
 
             Spacer(Modifier.height(16.dp))
+
             Tarea(icon = R.drawable.icono_asistencia, text = "Corte de alfalfa", chipColor = mint)
             Spacer(Modifier.height(8.dp))
             Tarea(icon = R.drawable.icono_gota, text = "Riego programado", chipColor = mint)
@@ -93,39 +104,48 @@ fun AsistenciaCalendario() {
                 Text(
                     "+ ",
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold, color = text
+                        fontWeight = FontWeight.Bold,
+                        color = textColor
                     )
                 )
                 Column {
-                    Text("Nueva", color = text, textDecoration = TextDecoration.Underline)
-                    Text("tarea", color = text, textDecoration = TextDecoration.Underline)
+                    Text("Nueva", color = textColor, textDecoration = TextDecoration.Underline)
+                    Text("tarea", color = textColor, textDecoration = TextDecoration.Underline)
                 }
             }
 
             Spacer(Modifier.height(16.dp))
 
-            // “ATRAS” visual
-            Surface(color = Color(0xFFD6E35E), contentColor = Color.Black, shape = RoundedCornerShape(12.dp)) {
-                Text("←  ATRAS", modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                shape = shapes.medium
+            ) {
+                Text(
+                    "←  ATRAS",
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                )
             }
         }
     }
 }
+
 @Composable
-fun Day(n: Int, selected: Boolean, textColor: Color) {
+fun Day(n: Int, selected: Boolean, selectedColor: Color, textColor: Color) {
     Box(Modifier.width(32.dp).height(28.dp), contentAlignment = Alignment.Center) {
         if (selected) {
             Box(
                 Modifier
                     .size(26.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF5BBE99))
+                    .background(selectedColor)
             )
         }
         Text(
             n.toString(),
             style = MaterialTheme.typography.bodySmall.copy(
-                color = if (selected) Color.White else textColor,
+                color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else textColor,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
             )
         )
@@ -134,7 +154,10 @@ fun Day(n: Int, selected: Boolean, textColor: Color) {
 
 @Composable
 fun Tarea(icon: Int, text: String, chipColor: Color) {
-    Surface(color = chipColor, shape = RoundedCornerShape(12.dp)) {
+    Surface(
+        color = chipColor,
+        shape = shapes.medium
+    ) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -143,14 +166,24 @@ fun Tarea(icon: Int, text: String, chipColor: Color) {
         ) {
             Image(painterResource(icon), contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(10.dp))
-            Text(text, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold))
+            Text(
+                text,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
+
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewAsistenciaCalendario() {
-    AsistenciaCalendario()
+    JakawiAgroTheme{
+        AsistenciaCalendario()
+    }
 }
 

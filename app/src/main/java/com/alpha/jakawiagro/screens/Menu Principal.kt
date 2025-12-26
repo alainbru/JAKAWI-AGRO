@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 
 @Composable
@@ -105,9 +107,9 @@ fun MenuItem(titulo: String, iconoRes: Int, onClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .size(120.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(shapes.large)
             .clickable(onClick = onClick)
-            .background(Color(0xFFEFF3F6))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(12.dp)
     ) {
         Image(
@@ -118,15 +120,11 @@ fun MenuItem(titulo: String, iconoRes: Int, onClick: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = titulo,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
             textAlign = TextAlign.Center
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MenuPrincipalPreview() {
-    val navController = rememberNavController()
-    MenuPrincipal(navController)
-}

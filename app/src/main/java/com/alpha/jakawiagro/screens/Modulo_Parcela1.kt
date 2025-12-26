@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 
 @Composable
@@ -41,24 +42,23 @@ fun Gestion_parcela() {
                 onProfileClick = { /* Ir a perfil o ajustes */ }
             )
         },
-        bottomBar = { BottomActionBar() // 👈 aquí agregamos la barra inferior
-        }
+        bottomBar = { BottomActionBar() }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .background(Color(0xFFF2F2F2)),
+                .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(16.dp)
         ) {
             items(parcelas) { parcela ->
                 ParcelaCard(parcela)
             }
-
         }
     }
 }
+
 data class Parcela(
     val nombre: String,
     val uso: String,
@@ -70,22 +70,24 @@ fun ParcelaCard(parcela: Parcela) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0E0E0))
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(parcela.nombre, style = MaterialTheme.typography.titleMedium)
-            Text(parcela.uso, style = MaterialTheme.typography.bodyMedium)
-            Text("${parcela.areaHa} ha", style = MaterialTheme.typography.bodySmall)
+            Text(parcela.nombre, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(parcela.uso, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("${parcela.areaHa} ha", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
-
 @Composable
 fun BottomActionBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -100,18 +102,20 @@ fun ActionButton(label: String) {
     Button(
         onClick = { /* sin funcionalidad por ahora */ },
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF4CAF50),
-            contentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Text(label)
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewGestionParcela() {
-    MaterialTheme {
+fun GestionParcelaDarkPreview() {
+    JakawiAgroTheme {
         Gestion_parcela()
     }
 }
+
+

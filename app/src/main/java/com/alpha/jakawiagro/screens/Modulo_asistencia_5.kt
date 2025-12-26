@@ -20,22 +20,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+
 @Composable
 fun AsistenciaCrearTarea() {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val textDark = Color(0xFF1E2F28)
-    val line = Color(0x33000000)
+    val line = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+    val mint = MaterialTheme.colorScheme.secondaryContainer
 
     Scaffold(
         topBar = { MainTopAppBar(title = "ASISTENCIA") },
-        containerColor = greenBar
+        containerColor = MaterialTheme.colorScheme.primary
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(padding)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.Start
@@ -44,7 +43,7 @@ fun AsistenciaCrearTarea() {
             Text(
                 text = "CREAR  NUEVA\nTAREA",
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = textDark,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 22.sp,
                     lineHeight = 28.sp,
                     letterSpacing = 2.sp,
@@ -63,7 +62,9 @@ fun AsistenciaCrearTarea() {
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = "Seleccionar parcela",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = textDark)
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 )
             }
             Spacer(Modifier.height(8.dp))
@@ -77,31 +78,52 @@ fun AsistenciaCrearTarea() {
             Spacer(Modifier.height(16.dp))
             Text(
                 text = "Tipo de labor (Riego, Fertilización,\nCorte, Otro)",
-                style = MaterialTheme.typography.bodyLarge.copy(color = textDark)
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             )
             Spacer(Modifier.height(8.dp))
-            Box(Modifier.fillMaxWidth().height(1.dp).background(line))
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(line)
+            )
 
             Spacer(Modifier.height(16.dp))
             Text(
                 text = "Fecha y hora",
-                style = MaterialTheme.typography.bodyLarge.copy(color = textDark)
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             )
             Spacer(Modifier.height(8.dp))
-            Box(Modifier.fillMaxWidth().height(1.dp).background(line))
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(line)
+            )
 
             Spacer(Modifier.height(16.dp))
             Text(
                 text = "Nota opcional",
-                style = MaterialTheme.typography.bodyLarge.copy(color = textDark.copy(alpha = 0.85f))
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
+                )
             )
             Spacer(Modifier.height(8.dp))
-            Box(Modifier.fillMaxWidth().height(1.dp).background(line))
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(line)
+            )
 
             Spacer(Modifier.height(20.dp))
             Surface(
                 color = mint,
-                contentColor = Color.Black,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(
@@ -120,7 +142,8 @@ fun AsistenciaCrearTarea() {
                     Text(
                         text = "Guardar tarea",
                         style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     )
                 }
@@ -130,7 +153,7 @@ fun AsistenciaCrearTarea() {
             Text(
                 text = "Cancelar",
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = textDark,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textDecoration = TextDecoration.Underline,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -139,8 +162,11 @@ fun AsistenciaCrearTarea() {
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewAsistenciaCrear() {
-    AsistenciaCrearTarea()
+    JakawiAgroTheme{
+        AsistenciaCrearTarea()
+    }
 }

@@ -24,23 +24,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
 fun AsistenciaHistorial() {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val pill = Color(0xFFD9E6E0)
-    val textDark = Color(0xFF21342C)
+    val mint = MaterialTheme.colorScheme.secondaryContainer
+    val pill = MaterialTheme.colorScheme.surfaceVariant
 
     Scaffold(
         topBar = { MainTopAppBar(title = "ASISTENCIA") },
-        containerColor = greenBar
+        containerColor = MaterialTheme.colorScheme.primary
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(padding)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -50,11 +48,11 @@ fun AsistenciaHistorial() {
                 text = "HISTORIAL DE\nASISTENCIA",
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium.copy(
-                    fontSize = 26.sp,           // ↑ tamaño
-                    letterSpacing = 2.sp,       // ↑ espaciado
+                    fontSize = 26.sp,
+                    letterSpacing = 2.sp,
                     lineHeight = 32.sp,
                     fontWeight = FontWeight.Black,
-                    color = textDark
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             )
 
@@ -64,68 +62,41 @@ fun AsistenciaHistorial() {
                 modifier = Modifier.fillMaxWidth().widthIn(max = 460.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Row(verticalAlignment = Alignment.Top) {
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp)                               // ↑ tamaño del check
-                            .clip(CircleShape)
-                            .background(mint),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.icono_check),
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)            // ↑ icono interno
-                        )
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    Column {
-                        Text(
-                            text = "Riego completado – 12 marzo 2024",
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                color = textDark,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
+                listOf(
+                    "Riego completado – 12 marzo 2024" to "(Parcela 1)",
+                    "Corte de alfalfa – 10 marzo 2024" to "(Parcela 2)"
+                ).forEach { (title, subtitle) ->
+                    Row(verticalAlignment = Alignment.Top) {
+                        Box(
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clip(CircleShape)
+                                .background(mint),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.icono_check),
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
                             )
-                        )
-                        Text(
-                            text = "(Parcela 1)",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = textDark.copy(alpha = 0.85f)
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                )
                             )
-                        )
-                    }
-                }
-                Row(verticalAlignment = Alignment.Top) {
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clip(CircleShape)
-                            .background(mint),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.icono_check),
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    Column {
-                        Text(
-                            text = "Corte de alfalfa – 10 marzo 2024",
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                color = textDark,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
+                            Text(
+                                text = subtitle,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
+                                )
                             )
-                        )
-                        Text(
-                            text = "(Parcela 2)",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = textDark.copy(alpha = 0.85f)
-                            )
-                        )
+                        }
                     }
                 }
             }
@@ -144,7 +115,7 @@ fun AsistenciaHistorial() {
                         .height(48.dp)
                 ) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Registro", color = textDark, fontWeight = FontWeight.Bold)
+                        Text("Registro", color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                     }
                 }
                 Card(
@@ -163,10 +134,10 @@ fun AsistenciaHistorial() {
                         Image(
                             painter = painterResource(R.drawable.icono_busqueda),
                             contentDescription = null,
-                            modifier = Modifier.size(18.dp) // ↑ icono filtro
+                            modifier = Modifier.size(18.dp)
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("Filtro", color = textDark, fontWeight = FontWeight.Bold)
+                        Text("Filtro", color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -192,14 +163,14 @@ fun AsistenciaHistorial() {
                         "+",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Black,
-                        color = textDark
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(
                         "Nueva tarea",
                         style = MaterialTheme.typography.titleSmall.copy(
                             fontWeight = FontWeight.Black,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     )
                 }
@@ -210,7 +181,7 @@ fun AsistenciaHistorial() {
             Text(
                 text = "Volver",
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = textDark,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
                 )
@@ -221,9 +192,12 @@ fun AsistenciaHistorial() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewAsistencia() {
-    AsistenciaHistorial()
+    JakawiAgroTheme{
+        AsistenciaHistorial()
+    }
+
 }
 

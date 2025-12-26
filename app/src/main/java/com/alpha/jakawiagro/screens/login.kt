@@ -20,23 +20,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import androidx.compose.material3.TextFieldDefaults
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginForm(onForgotPassword = {})
-}
 
 @Composable
 fun LoginForm(onForgotPassword: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    val shapes = MaterialTheme.shapes
 
     Scaffold { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color(0xFFEDF6F0))
+                .background(colors.background)
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -53,8 +51,10 @@ fun LoginForm(onForgotPassword: () -> Unit) {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                label = { Text("Usuario") },
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                label = { Text("Usuario", color = colors.onSurface) },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = colors.primary) },
+                shape = shapes.medium,
+
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -63,9 +63,11 @@ fun LoginForm(onForgotPassword: () -> Unit) {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                label = { Text("Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                label = { Text("Contraseña", color = colors.onSurface) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colors.primary) },
                 visualTransformation = PasswordVisualTransformation(),
+                shape = shapes.medium,
+
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -76,30 +78,41 @@ fun LoginForm(onForgotPassword: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
+                shape = shapes.medium
             ) {
-                Text("INICIAR", color = Color.White)
+                Text("INICIAR", color = colors.onPrimary)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = "REGISTRARSE",
-                    color = Color(0xFF03A9F4),
+                    color = colors.secondary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable { /* Acción de registro */ }
                 )
                 Text(
                     text = "OLVIDASTE LA CONTRASEÑA",
-                    color = Color(0xFF03A9F4),
+                    color = colors.secondary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable { onForgotPassword() }
                 )
             }
         }
+    }
+}
+
+
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewLoginFormDark() {
+    JakawiAgroTheme {
+        LoginForm(onForgotPassword = {})
     }
 }

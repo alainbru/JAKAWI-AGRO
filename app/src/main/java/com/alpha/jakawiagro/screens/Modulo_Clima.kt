@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.tooling.preview.Preview
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 
 @Composable
@@ -36,7 +37,6 @@ fun Clima() {
         topBar = {
             MainTopAppBar(
                 title = "Clima",
-
                 onMenuClick = { /* Abrir drawer o menú */ },
                 onProfileClick = { /* Ir a perfil o ajustes */ }
             )
@@ -47,39 +47,32 @@ fun Clima() {
                     .padding(padding)
                     .fillMaxSize()
                     .padding(16.dp)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 Text(
                     text = "Bienvenido 'USUARIO'",
                     style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                // 🔹 Sección de encabezado con clima actual
                 HeaderSection()
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // 🔹 Mensaje de alerta principal
                 ForecastMessage()
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // 🔹 Pronóstico por hora
                 HourlyForecast()
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // 🔹 Alertas agrícolas
                 AgriculturalAlerts()
             }
         }
     )
 }
 
-
-
 @Composable
 fun WeatherForecastScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF3F6))
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
         HeaderSection()
@@ -99,8 +92,8 @@ fun HeaderSection() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            Text("UBICACIÓN", style = MaterialTheme.typography.labelSmall)
-            Text("13°C", style = MaterialTheme.typography.displaySmall)
+            Text("UBICACIÓN", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
+            Text("13°C", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onBackground)
         }
         Icon(
             painter = painterResource(id = R.drawable.icono_lluvia),
@@ -116,12 +109,13 @@ fun HeaderSection() {
 fun ForecastMessage() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFDDEAF2))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
     ) {
         Text(
             text = "🌨️ En tu parcela de quinua en Puno se espera helada el 23 de abril.",
             modifier = Modifier.padding(12.dp),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSecondaryContainer
         )
     }
 }
@@ -129,19 +123,19 @@ fun ForecastMessage() {
 @Composable
 fun HourlyForecast() {
     LazyRow {
-        items(listOf("1:00", "2:00", "3:00", "3:00", "3:00")) { hour ->
+        items(listOf("1:00", "2:00", "3:00", "4:00", "5:00")) { hour ->
             Column(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .width(64.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(hour, style = MaterialTheme.typography.labelSmall)
+                Text(hour, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground)
                 Icon(
                     painter = painterResource(id = R.drawable.icono_clima),
                     contentDescription = "Clima",
                     modifier = Modifier.size(48.dp),
-                    tint = Color.Unspecified // mantiene el color real del drawable
+                    tint = Color.Unspecified
                 )
             }
         }
@@ -164,21 +158,23 @@ fun AgriculturalAlerts() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Text(
                     text = alert,
                     modifier = Modifier.padding(12.dp),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
 }
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewClima() {
-    MaterialTheme {
+fun ClimaDarkPreview() {
+    JakawiAgroTheme(darkTheme = true) {
         Clima()
     }
 }

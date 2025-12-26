@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,11 +29,13 @@ fun AsistenciaRecordatorio(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val pillBg = Color(0xFF90CDB5)
-    val textDark = Color(0xFF1B2E27)
+    val primaryBar = MaterialTheme.colorScheme.primary
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val mint = MaterialTheme.colorScheme.secondaryContainer
+    val pillBg = MaterialTheme.colorScheme.tertiaryContainer
+    val textColor = MaterialTheme.colorScheme.onBackground
+    val pillTextColor = MaterialTheme.colorScheme.onTertiaryContainer
+    val plusColor = MaterialTheme.colorScheme.primaryContainer
 
     Scaffold(
         topBar = {
@@ -41,12 +45,12 @@ fun AsistenciaRecordatorio(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = primaryBar
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(backgroundColor)
                 .padding(padding)
         ) {
             Column(
@@ -64,7 +68,7 @@ fun AsistenciaRecordatorio(
                         fontSize = 22.sp,
                         letterSpacing = 2.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF2B3E36),
+                        color = textColor,
                         lineHeight = 28.sp
                     )
                 )
@@ -73,7 +77,7 @@ fun AsistenciaRecordatorio(
                 Card(
                     colors = CardDefaults.cardColors(containerColor = mint),
                     elevation = CardDefaults.cardElevation(0.dp),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(12.dp)) {
@@ -88,7 +92,7 @@ fun AsistenciaRecordatorio(
                                 text = "Parcela 1 – Riego recomendado",
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = FontWeight.SemiBold,
-                                    color = textDark
+                                    color = textColor
                                 ),
                                 modifier = Modifier.weight(1f)
                             )
@@ -96,33 +100,23 @@ fun AsistenciaRecordatorio(
                                 text = "hoy 5 p.m.",
                                 style = MaterialTheme.typography.labelMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = textDark
+                                    color = textColor
                                 )
                             )
                         }
                         Spacer(Modifier.height(10.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            // Pill 1
-                            Surface(color = pillBg, shape = RoundedCornerShape(10.dp)) {
-                                Text(
-                                    "Ver detalle",
-                                    color = Color(0xFF0F2F27),
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                                )
-                            }
-                            // Pill 2
-                            Surface(color = pillBg, shape = RoundedCornerShape(10.dp)) {
-                                Text(
-                                    "Marcar como hecho",
-                                    color = Color(0xFF0F2F27),
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                                )
+                            listOf("Ver detalle", "Marcar como hecho").forEach { pillText ->
+                                Surface(color = pillBg, shape = shapes.small) {
+                                    Text(
+                                        pillText,
+                                        color = pillTextColor,
+                                        style = MaterialTheme.typography.labelMedium.copy(
+                                            fontWeight = FontWeight.SemiBold
+                                        ),
+                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -134,12 +128,11 @@ fun AsistenciaRecordatorio(
                 Card(
                     colors = CardDefaults.cardColors(containerColor = mint),
                     elevation = CardDefaults.cardElevation(0.dp),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = shapes.medium,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.padding(12.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            // Usa tu ícono de tijeras si lo agregas; de momento placeholder
                             Image(
                                 painter = painterResource(R.drawable.icono_asistencia),
                                 contentDescription = null,
@@ -150,32 +143,24 @@ fun AsistenciaRecordatorio(
                                 text = "Parcela 2 – Primer corte\nel 10 de abril",
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = FontWeight.SemiBold,
-                                    color = textDark
+                                    color = textColor
                                 ),
                                 modifier = Modifier.weight(1f)
                             )
                         }
                         Spacer(Modifier.height(10.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            Surface(color = pillBg, shape = RoundedCornerShape(10.dp)) {
-                                Text(
-                                    "Ver detalle",
-                                    color = Color(0xFF0F2F27),
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                                )
-                            }
-                            Surface(color = pillBg, shape = RoundedCornerShape(10.dp)) {
-                                Text(
-                                    "Marcar como hecho",
-                                    color = Color(0xFF0F2F27),
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-                                )
+                            listOf("Ver detalle", "Marcar como hecho").forEach { pillText ->
+                                Surface(color = pillBg, shape = shapes.small) {
+                                    Text(
+                                        pillText,
+                                        color = pillTextColor,
+                                        style = MaterialTheme.typography.labelMedium.copy(
+                                            fontWeight = FontWeight.SemiBold
+                                        ),
+                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -188,18 +173,18 @@ fun AsistenciaRecordatorio(
                     modifier = Modifier
                         .size(56.dp)
                         .clip(CircleShape)
-                        .background(greenBar),
+                        .background(plusColor),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("+", fontSize = 28.sp, color = Color(0xFF2B3E36), fontWeight = FontWeight.Bold)
+                    Text("+", fontSize = 28.sp, color = textColor, fontWeight = FontWeight.Bold)
                 }
             }
 
             // Botón ATRAS abajo-derecha
             Button(
                 onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = mint, contentColor = Color.Black),
-                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = mint, contentColor = pillTextColor),
+                shape = shapes.medium,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
@@ -213,8 +198,11 @@ fun AsistenciaRecordatorio(
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewAsistenciaRecordatorio() {
-    AsistenciaRecordatorio()
+    JakawiAgroTheme{
+        AsistenciaRecordatorio()
+    }
 }

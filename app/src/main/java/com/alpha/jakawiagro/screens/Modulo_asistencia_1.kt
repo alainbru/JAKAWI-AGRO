@@ -21,7 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,9 +32,10 @@ fun ModuloAsistencia(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
+    val primaryBar = MaterialTheme.colorScheme.primary
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val cardColor = MaterialTheme.colorScheme.secondaryContainer
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     Scaffold(
         topBar = {
@@ -41,12 +45,12 @@ fun ModuloAsistencia(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = primaryBar
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(backgroundColor)
                 .padding(padding)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +62,7 @@ fun ModuloAsistencia(
                 contentDescription = "Asistente",
                 modifier = Modifier
                     .size(180.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(shapes.medium)
             )
 
             Spacer(Modifier.height(10.dp))
@@ -68,7 +72,7 @@ fun ModuloAsistencia(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.Black,
-                    color = Color(0xFF0F2F27),
+                    color = textColor,
                     lineHeight = 20.sp
                 )
             )
@@ -88,13 +92,13 @@ fun ModuloAsistencia(
                     OpcionAsistenciaCard(
                         iconRes = R.drawable.icono_cultivos,
                         label = "CULTIVOS",
-                        containerColor = mint,
+                        containerColor = cardColor,
                         modifier = Modifier.weight(1f)
                     )
                     OpcionAsistenciaCard(
-                        iconRes = R.drawable.icono_clima, // lo usaremos como gota para “RIEGO”
+                        iconRes = R.drawable.icono_clima,
                         label = "RIEGO",
-                        containerColor = mint,
+                        containerColor = cardColor,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -106,15 +110,15 @@ fun ModuloAsistencia(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     OpcionAsistenciaCard(
-                        iconRes = R.drawable.icono_asistencia, // para PODA/CORTE (placeholder)
+                        iconRes = R.drawable.icono_asistencia,
                         label = "PODA /\nCORTE",
-                        containerColor = mint,
+                        containerColor = cardColor,
                         modifier = Modifier.weight(1f)
                     )
                     OpcionAsistenciaCard(
                         iconRes = R.drawable.icono_plagas,
                         label = "PLAGAS",
-                        containerColor = mint,
+                        containerColor = cardColor,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -136,7 +140,7 @@ fun OpcionAsistenciaCard(
     Card(
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        shape = RoundedCornerShape(16.dp),
+        shape = shapes.large,
         modifier = modifier
             .height(96.dp)
     ) {
@@ -158,7 +162,7 @@ fun OpcionAsistenciaCard(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF0A2F24),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     lineHeight = 16.sp
                 )
             )
@@ -166,10 +170,14 @@ fun OpcionAsistenciaCard(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewModuloA() {
-    ModuloAsistencia()
-}
 
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewMenuPrincipalDark() {
+    JakawiAgroTheme {
+        // NavController de prueba para preview
+        val navController = rememberNavController()
+        MenuPrincipal(navController)
+    }
+}
 

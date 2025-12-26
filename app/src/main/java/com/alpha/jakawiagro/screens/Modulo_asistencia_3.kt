@@ -20,16 +20,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alpha.jakawiagro.R
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.ui.theme.shapes
 
 @Composable
 fun AsistenciaRiego(
     onMenuClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
-    val beige = Color(0xFFF1EAD9)
-    val greenBar = Color(0xFF8BC34A)
-    val mint = Color(0xFF78D9AE)
-    val textDark = Color(0xFF1C2F29)
+    val mint = MaterialTheme.colorScheme.secondaryContainer
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val primaryBar = MaterialTheme.colorScheme.primary
+    val textColor = MaterialTheme.colorScheme.onBackground
+    val buttonTextColor = MaterialTheme.colorScheme.onSecondaryContainer
 
     Scaffold(
         topBar = {
@@ -39,12 +42,12 @@ fun AsistenciaRiego(
                 onProfileClick = onProfileClick
             )
         },
-        containerColor = greenBar
+        containerColor = primaryBar
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(beige)
+                .background(backgroundColor)
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
@@ -63,7 +66,7 @@ fun AsistenciaRiego(
                         letterSpacing = 2.sp,
                         lineHeight = 28.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = textDark
+                        color = textColor
                     )
                 )
 
@@ -82,7 +85,7 @@ fun AsistenciaRiego(
                         text = "Hora recomendada: Hoy 5 p.m.",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.SemiBold,
-                            color = textDark
+                            color = textColor
                         )
                     )
                 }
@@ -93,97 +96,54 @@ fun AsistenciaRiego(
                         text = "CONSEJOS:",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Black,
-                            color = textDark
+                            color = textColor
                         )
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text("•  Usar entre 25–30 litros por surco.", color = Color.Black)
-                    Text("•  Evitar las horas de máximo sol.", color = Color.Black)
-                    Text("•  Considerar la humedad del suelo.", color = Color.Black)
+                    listOf(
+                        "•  Usar entre 25–30 litros por surco.",
+                        "•  Evitar las horas de máximo sol.",
+                        "•  Considerar la humedad del suelo."
+                    ).forEach { consejo ->
+                        Text(consejo, color = textColor)
+                    }
                 }
 
                 Spacer(Modifier.height(18.dp))
-                Surface(
-                    color = mint,
-                    contentColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icono_check),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(10.dp))
-                        Text(
-                            "Marcar como realizado",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-                }
 
-                Spacer(Modifier.height(10.dp))
-                Surface(
-                    color = mint,
-                    contentColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                listOf(
+                    R.drawable.icono_check to "Marcar como realizado",
+                    R.drawable.icono_calendario to "Añadir al calendario",
+                    R.drawable.icono_lista to "Ver checklist"
+                ).forEach { (icon, label) ->
+                    Surface(
+                        color = mint,
+                        contentColor = buttonTextColor,
+                        shape = shapes.medium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(44.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icono_calendario),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(10.dp))
-                        Text(
-                            "Añadir al calendario",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.SemiBold
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
                             )
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(10.dp))
-                Surface(
-                    color = mint,
-                    contentColor = Color.Black,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 12.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.icono_lista),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(10.dp))
-                        Text(
-                            "Ver checklist",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.SemiBold
+                            Spacer(Modifier.width(10.dp))
+                            Text(
+                                label,
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = buttonTextColor
+                                )
                             )
-                        )
+                        }
                     }
+                    Spacer(Modifier.height(10.dp))
                 }
 
                 Spacer(Modifier.height(200.dp))
@@ -191,7 +151,7 @@ fun AsistenciaRiego(
                     text = "Volver",
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = textDark,
+                        color = textColor,
                         fontWeight = FontWeight.SemiBold,
                         textDecoration = TextDecoration.Underline
                     ),
@@ -202,12 +162,11 @@ fun AsistenciaRiego(
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewAsistenciaRiego() {
-    AsistenciaRiego()
+    JakawiAgroTheme{
+        AsistenciaRiego()
+    }
 }
-
-
-
-
