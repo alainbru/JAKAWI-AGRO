@@ -12,6 +12,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.TextFieldDefaults
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +33,9 @@ fun NuevoForrajeScreen(
     var parcela by remember { mutableStateOf("") }
     var fechaInicio by remember { mutableStateOf("") }
     var fechaFin by remember { mutableStateOf("") }
+
+    val colors = MaterialTheme.colorScheme
+    val shapes = MaterialTheme.shapes
 
     Scaffold(
         topBar = {
@@ -53,15 +58,20 @@ fun NuevoForrajeScreen(
                 OutlinedTextField(
                     value = cantidad,
                     onValueChange = { cantidad = it },
-                    label = { Text("Cantidad") },
+                    label = { Text("Cantidad", color = colors.onSurface) },
                     modifier = Modifier.weight(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    shape = shapes.medium,
+
+
                 )
                 OutlinedTextField(
                     value = unidad,
                     onValueChange = { unidad = it },
-                    label = { Text("Unidad") },
-                    modifier = Modifier.weight(1f)
+                    label = { Text("Unidad", color = colors.onSurface) },
+                    modifier = Modifier.weight(1f),
+                    shape = shapes.medium,
+
                 )
             }
 
@@ -69,16 +79,20 @@ fun NuevoForrajeScreen(
             OutlinedTextField(
                 value = tipoForraje,
                 onValueChange = { tipoForraje = it },
-                label = { Text("Tipo de forraje") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Tipo de forraje", color = colors.onSurface) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium,
+
             )
 
             // Variedad
             OutlinedTextField(
                 value = variedad,
                 onValueChange = { variedad = it },
-                label = { Text("Variedad") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Variedad", color = colors.onSurface) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium,
+
             )
 
             // Período de inicio
@@ -86,20 +100,23 @@ fun NuevoForrajeScreen(
                 "Periodo de inicio",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
+                color = colors.onSurface,
                 modifier = Modifier.padding(top = 4.dp)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
                     selected = periodoInicio == "Verano Andino",
-                    onClick = { periodoInicio = "Verano Andino" }
+                    onClick = { periodoInicio = "Verano Andino" },
+                    colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
                 )
-                Text("Verano Andino")
+                Text("Verano Andino", color = colors.onSurface)
                 Spacer(modifier = Modifier.width(12.dp))
                 RadioButton(
                     selected = periodoInicio == "Invierno Andino",
-                    onClick = { periodoInicio = "Invierno Andino" }
+                    onClick = { periodoInicio = "Invierno Andino" },
+                    colors = RadioButtonDefaults.colors(selectedColor = colors.primary)
                 )
-                Text("Invierno Andino")
+                Text("Invierno Andino", color = colors.onSurface)
             }
 
             // Descripción y Tipo de ganado
@@ -107,14 +124,18 @@ fun NuevoForrajeScreen(
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },
-                    label = { Text("Descripción") },
-                    modifier = Modifier.weight(1f)
+                    label = { Text("Descripción", color = colors.onSurface) },
+                    modifier = Modifier.weight(1f),
+                    shape = shapes.medium,
+
                 )
                 OutlinedTextField(
                     value = tipoGanado,
                     onValueChange = { tipoGanado = it },
-                    label = { Text("Tipo de ganado") },
-                    modifier = Modifier.weight(1f)
+                    label = { Text("Tipo de ganado", color = colors.onSurface) },
+                    modifier = Modifier.weight(1f),
+                    shape = shapes.medium,
+
                 )
             }
 
@@ -122,16 +143,21 @@ fun NuevoForrajeScreen(
             OutlinedTextField(
                 value = destino,
                 onValueChange = { destino = it },
-                label = { Text("Destino (uso propio o venta)") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Destino (uso propio o venta)", color = colors.onSurface) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium,
+
+
             )
 
             // Escoger parcela
             OutlinedTextField(
                 value = parcela,
                 onValueChange = { parcela = it },
-                label = { Text("Escoger parcela") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Escoger parcela", color = colors.onSurface) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.medium,
+
             )
 
             // Fecha de inicio y fin (misma fila)
@@ -139,14 +165,18 @@ fun NuevoForrajeScreen(
                 OutlinedTextField(
                     value = fechaInicio,
                     onValueChange = { fechaInicio = it },
-                    label = { Text("Fecha de Inicio") },
-                    modifier = Modifier.weight(1f)
+                    label = { Text("Fecha de Inicio", color = colors.onSurface) },
+                    modifier = Modifier.weight(1f),
+                    shape = shapes.medium,
+
                 )
                 OutlinedTextField(
                     value = fechaFin,
                     onValueChange = { fechaFin = it },
-                    label = { Text("Fecha de Fin") },
-                    modifier = Modifier.weight(1f)
+                    label = { Text("Fecha de Fin", color = colors.onSurface) },
+                    modifier = Modifier.weight(1f),
+                    shape = shapes.medium,
+
                 )
             }
 
@@ -157,16 +187,21 @@ fun NuevoForrajeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF56C7C1))
+                colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
+                shape = shapes.medium
             ) {
-                Text("Confirmar", fontWeight = FontWeight.Bold, color = Color.Black)
+                Text("Confirmar", fontWeight = FontWeight.Bold, color = colors.onPrimary)
             }
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewNuevoForrajeScreen() {
-    NuevoForrajeScreen()
+    JakawiAgroTheme {
+        NuevoForrajeScreen()
+    }
 }
