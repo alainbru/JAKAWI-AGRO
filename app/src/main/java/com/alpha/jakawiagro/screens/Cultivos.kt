@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
 fun CultivosScreen(
@@ -21,6 +22,7 @@ fun CultivosScreen(
     onProfileClick: () -> Unit = {}
 ) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
                 title = "Cultivos",
@@ -31,7 +33,9 @@ fun CultivosScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddCosechaClick,
-                containerColor = Color(0xFF56C7C1)
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = MaterialTheme.shapes.large
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar")
             }
@@ -45,15 +49,29 @@ fun CultivosScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("🥔 Tus cosechas", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+
+            Text(
+                text = "🥔 Tus cosechas",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
-            Text("0 cosechas", color = Color.Gray)
+
+            Text(
+                text = "0 cosechas",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewCultivosScreen() {
-    CultivosScreen(onAddCosechaClick = {})
+    JakawiAgroTheme {
+        CultivosScreen(onAddCosechaClick = {})
+    }
 }

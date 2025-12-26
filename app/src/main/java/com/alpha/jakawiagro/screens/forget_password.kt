@@ -18,7 +18,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,22 +33,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
-@Preview(showBackground = true)
-@Composable
-fun PasswordRecoveryPreview() {
-    PasswordRecoveryScreen()
-}
 
 @Composable
 fun PasswordRecoveryScreen() {
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFEDE7D5)) // Fondo claro
+                .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
@@ -68,6 +68,7 @@ fun PasswordRecoveryScreen() {
                 text = "Ingrese su correo electrónico registrado en JAKAWI AGRO",
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -76,8 +77,23 @@ fun PasswordRecoveryScreen() {
                 value = "",
                 onValueChange = {},
                 label = { Text("Correo Electrónico") },
-                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-                modifier = Modifier.fillMaxWidth()
+                leadingIcon = {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -88,9 +104,13 @@ fun PasswordRecoveryScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                shape = MaterialTheme.shapes.large,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
-                Text("RECUPERAR", color = Color.White)
+                Text("RECUPERAR")
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -100,16 +120,29 @@ fun PasswordRecoveryScreen() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("¿Ya tienes una cuenta?")
+                Text(
+                    text = "¿Ya tienes una cuenta?",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "INICIAR SESIÓN",
-                    color = Color(0xFF03A9F4),
+                    color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable { }
                 )
             }
         }
+    }
+}
+
+
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PasswordRecoveryPreview() {
+    JakawiAgroTheme {
+        PasswordRecoveryScreen()
     }
 }
 

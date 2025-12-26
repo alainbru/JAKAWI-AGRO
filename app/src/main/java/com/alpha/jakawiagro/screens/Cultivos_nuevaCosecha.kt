@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,10 +33,11 @@ fun NuevaCosechaScreen(
     var fechaFin by remember { mutableStateOf("") }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
-                title = "Nueva Cosecha",
-                onMenuClick = onMenuClick,
+                title = "Nueva Cosecha"
+                ,   onMenuClick = onMenuClick,
                 onProfileClick = onProfileClick
             )
         }
@@ -47,19 +49,27 @@ fun NuevaCosechaScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 OutlinedTextField(
                     value = cantidad,
                     onValueChange = { cantidad = it },
                     label = { Text("Cantidad") },
                     modifier = Modifier.weight(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = outlinedColors()
                 )
                 OutlinedTextField(
                     value = unidad,
                     onValueChange = { unidad = it },
                     label = { Text("Unidad") },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = outlinedColors()
                 )
             }
 
@@ -67,65 +77,96 @@ fun NuevaCosechaScreen(
                 value = tipoCultivo,
                 onValueChange = { tipoCultivo = it },
                 label = { Text("Tipo de cultivo") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = outlinedColors()
             )
+
             OutlinedTextField(
                 value = variedad,
                 onValueChange = { variedad = it },
                 label = { Text("Variedad") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = outlinedColors()
             )
 
             Text(
                 text = "Periodo de inicio",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 4.dp)
             )
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
                     selected = periodoInicio == "Verano Andino",
-                    onClick = { periodoInicio = "Verano Andino" }
+                    onClick = { periodoInicio = "Verano Andino" },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = MaterialTheme.colorScheme.primary
+                    )
                 )
-                Text("Verano Andino")
+                Text("Verano Andino", color = MaterialTheme.colorScheme.onBackground)
+
                 Spacer(modifier = Modifier.width(12.dp))
+
                 RadioButton(
                     selected = periodoInicio == "Invierno Andino",
-                    onClick = { periodoInicio = "Invierno Andino" }
+                    onClick = { periodoInicio = "Invierno Andino" },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = MaterialTheme.colorScheme.primary
+                    )
                 )
-                Text("Invierno Andino")
+                Text("Invierno Andino", color = MaterialTheme.colorScheme.onBackground)
             }
 
             OutlinedTextField(
                 value = descripcion,
                 onValueChange = { descripcion = it },
                 label = { Text("Descripción") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = outlinedColors()
             )
+
             OutlinedTextField(
                 value = destino,
                 onValueChange = { destino = it },
                 label = { Text("Destino (Consumo o venta)") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = outlinedColors()
             )
+
             OutlinedTextField(
                 value = parcela,
                 onValueChange = { parcela = it },
                 label = { Text("Escoger parcela") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = outlinedColors()
             )
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 OutlinedTextField(
                     value = fechaInicio,
                     onValueChange = { fechaInicio = it },
                     label = { Text("Fecha de inicio") },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = outlinedColors()
                 )
                 OutlinedTextField(
                     value = fechaFin,
                     onValueChange = { fechaFin = it },
                     label = { Text("Fecha de fin") },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = outlinedColors()
                 )
             }
 
@@ -136,17 +177,38 @@ fun NuevaCosechaScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF56C7C1))
+                shape = MaterialTheme.shapes.large,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
-                Text("Confirmar", fontWeight = FontWeight.Bold, color = Color.Black)
+                Text("Confirmar", fontWeight = FontWeight.Bold)
             }
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+/* 🎨 Colores unificados para OutlinedTextField */
+@Composable
+private fun outlinedColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = MaterialTheme.colorScheme.primary,
+    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+    focusedLabelColor = MaterialTheme.colorScheme.primary,
+    cursorColor = MaterialTheme.colorScheme.primary,
+    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+)
+
+
+
+
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewNuevaCosechaScreen() {
-    NuevaCosechaScreen()
+    JakawiAgroTheme {
+        NuevaCosechaScreen()
+    }
 }
 

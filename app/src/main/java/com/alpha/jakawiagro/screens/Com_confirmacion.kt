@@ -22,30 +22,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
 fun ConfirmacionExito(mensaje: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+
             // Círculo con Check
             Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .background(color = Color(0xFF00BCD4), shape = CircleShape),
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Éxito",
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(64.dp)
                 )
             }
@@ -55,7 +60,7 @@ fun ConfirmacionExito(mensaje: String) {
                 text = mensaje,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333),
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 32.dp)
             )
@@ -63,13 +68,12 @@ fun ConfirmacionExito(mensaje: String) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun PreviewConfirmacionExito() {
-    MaterialTheme {
+    JakawiAgroTheme {
         ConfirmacionExito(mensaje = "Operación realizada con éxito")
     }
 }
-
 
 

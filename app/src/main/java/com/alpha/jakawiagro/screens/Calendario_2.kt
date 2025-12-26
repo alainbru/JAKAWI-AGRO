@@ -1,5 +1,8 @@
 package com.alpha.jakawiagro.screens
 
+import PantallaCalendario
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,33 +31,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
-fun CalendarioP2() {
+fun CalendarioP2(onAddCosechaClick: () -> Unit,
+                 onMenuClick: () -> Unit = {},
+                 onProfileClick: () -> Unit = {}) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             MainTopAppBar(
-                onMenuClick = { /* Abrir drawer o menú */ },
-                onProfileClick = { /* Ir a perfil o ajustes */ }
+                title = "CALENDARIO"
+                ,   onMenuClick = onMenuClick,
+                onProfileClick = onProfileClick
             )
-        },
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Notas",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            PantallaFecha()
-
-            }
         }
-    )
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Notas",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            PantallaFecha()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,25 +72,31 @@ fun PantallaFecha() {
     var texto by remember { mutableStateOf("") }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBar(
-                title = { Text(fecha, style = MaterialTheme.typography.titleLarge) },
+                title = {
+                    Text(
+                        fecha,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.LightGray,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { /* Acción de confirmación */ },
-                containerColor = Color(0xFF4CAF50), // Verde bacán
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = MaterialTheme.shapes.large
             ) {
                 Icon(Icons.Default.Check, contentDescription = "Confirmar")
             }
-        },
-        containerColor = Color(0xFFF5F5F5) // Fondo gris claro
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -96,15 +111,27 @@ fun PantallaFecha() {
                 onValueChange = { texto = it },
                 placeholder = { Text("Escribe aquí...") },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                shape = MaterialTheme.shapes.medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     }
 }
-@Preview(showBackground = true, showSystemUi = true)
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewCalendarioP2() {
-    MaterialTheme {
-        CalendarioP2()
+fun PantallaCalendarioa() {
+    JakawiAgroTheme {
+        PantallaCalendario(onAddCosechaClick = {})
     }
 }
+
