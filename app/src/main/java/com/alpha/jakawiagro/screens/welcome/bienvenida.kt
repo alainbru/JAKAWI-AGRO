@@ -17,7 +17,7 @@ import com.alpha.jakawiagro.R
 import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
 
 @Composable
-fun PantallaBienvenidaHakwai() {
+fun PantallaBienvenidaHakwai(onContinue: () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "logoAnimation")
     val size by infiniteTransition.animateFloat(
         initialValue = 110f,
@@ -69,15 +69,22 @@ fun PantallaBienvenidaHakwai() {
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(onClick = onContinue) {
+                    Text("Continuar")
+                }
             }
         }
     }
 }
 
+
 @Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PantallaBienvenidaPreview() {
     JakawiAgroTheme {
-        PantallaBienvenidaHakwai()
+        PantallaBienvenidaHakwai(onContinue = {})
     }
 }

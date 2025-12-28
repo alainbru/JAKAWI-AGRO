@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alpha.jakawiagro.drawer.AppDrawer
 import com.alpha.jakawiagro.navigation.NavGraph
 import com.alpha.jakawiagro.navigation.Routes
-import com.alpha.jakawiagro.screens.MainTopAppBar
+import com.alpha.jakawiagro.screens.temporal.MainTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,21 +29,26 @@ fun AppRoot() {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
+    // ✅ En estas pantallas NO permitimos gesto lateral (para que el mapa sea fluido)
+    val drawerGesturesEnabled = currentRoute !in listOf(
+        Routes.PARCELAS_DRAW,
+        Routes.PARCELA_EDIT
+    )
+
     val title = when (currentRoute) {
         Routes.HOME -> "Inicio"
-        Routes.PARCELAS -> "Parcelas"
-        Routes.HELADAS -> "Pronóstico de Heladas"
+        Routes.PARCELAS_HOME -> "Parcelas"
+        Routes.PARCELAS_DRAW -> "Dibujar parcela"
+        Routes.PARCELAS_LIST -> "Mis parcelas"
+        Routes.CLIMA -> "Pronóstico de Heladas"
         Routes.PERFIL -> "Perfil"
         Routes.SETTINGS -> "Configuración"
         else -> "Jakawi Agro"
     }
 
-    // ✅ Evita que el drawer se abra por swipe cuando estás en el mapa
-    val disableDrawerGestures = currentRoute == Routes.PARCELAS
-
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = !disableDrawerGestures,
+        gesturesEnabled = drawerGesturesEnabled, // ✅ clave
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
@@ -62,19 +67,15 @@ fun AppRoot() {
     ) {
         Scaffold(
             topBar = {
-                // ✅ opcional: ocultar topbar en el mapa para que sea full pantalla
-                if (currentRoute != Routes.PARCELAS) {
-                    MainTopAppBar(
-                        title = title,
-                        onMenuClick = { scope.launch { drawerState.open() } },
-                        onProfileClick = {
-                            navController.navigate(Routes.PERFIL) { launchSingleTop = true }
-                        }
-                    )
-                }
+                MainTopAppBar(
+                    title = title,
+                    onMenuClick = { scope.launch { drawerState.open() } }, // ✅ solo botón abre drawer
+                    onProfileClick = { navController.navigate(Routes.PERFIL) { launchSingleTop = true } }
+                )
             }
-        ) { padding ->
-            Surface(modifier = Modifier.padding(padding)) {
+        ) { innerPadding ->
+            Surface(modifier = Modifier.padding(innerPadding)) {
+                // ✅ Importante: el padding se aplica aquí, así el mapa NO se va debajo del topbar
                 NavGraph(navController = navController)
             }
         }

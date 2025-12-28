@@ -1,16 +1,13 @@
 package com.alpha.jakawiagro.drawer
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -18,30 +15,33 @@ fun AppDrawer(
     currentRoute: String?,
     onItemClick: (String) -> Unit
 ) {
-    ModalDrawerSheet {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(280.dp)
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(16.dp)
+    ) {
 
-        Spacer(modifier = Modifier.height(12.dp))
-
+        /* ---------- HEADER ---------- */
         Text(
-            text = "Jakawi Agro 🌱",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
+            text = "Jakawi Agro",
+            style = MaterialTheme.typography.titleLarge
         )
 
+        Spacer(Modifier.height(24.dp))
+
+        /* ---------- ITEMS ---------- */
         drawerItems.forEach { item ->
+
+            val selected = currentRoute == item.route
+
             NavigationDrawerItem(
                 label = { Text(item.title) },
-                selected = currentRoute == item.route,
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                selected = selected,
                 onClick = { onItemClick(item.route) },
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.title
-                    )
-                },
-                modifier = Modifier.padding(
-                    NavigationDrawerItemDefaults.ItemPadding
-                )
+                modifier = Modifier.padding(vertical = 4.dp)
             )
         }
     }

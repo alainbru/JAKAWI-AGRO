@@ -1,7 +1,5 @@
 package com.alpha.jakawiagro.screens.auth
 
-import android.content.res.Configuration
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,9 +10,9 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -22,32 +20,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
 import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
-import com.alpha.jakawiagro.ui.theme.shapes
-
-@Preview(
-    showBackground = true,
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun RegisterScreenPreviewDark() {
-    JakawiAgroTheme {
-        RegisterScreen()
-    }
-}
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen() {
-    var clicked by remember { mutableStateOf(false) }
+fun RegisterScreen(
+    onRegisterSuccess: () -> Unit,
+    onBackToLogin: () -> Unit
+) {
+    val colors = MaterialTheme.colorScheme
+    val shapes = MaterialTheme.shapes
 
-    Scaffold { paddingValues ->
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var correo by rememberSaveable { mutableStateOf("") }
+    var pass1 by rememberSaveable { mutableStateOf("") }
+    var pass2 by rememberSaveable { mutableStateOf("") }
+
+    val passwordsMatch = pass1.isNotBlank() && pass1 == pass2
+    val canRegister = nombre.isNotBlank() && correo.isNotBlank() && passwordsMatch
+
+    Scaffold(
+        containerColor = colors.background
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
+                .background(colors.background)
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -64,93 +63,103 @@ fun RegisterScreen() {
             Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Nombre")
-                },
-                leadingIcon = {  Icon(Icons.Default.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary)  },
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Nombre") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = colors.primary) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = shapes.medium
-
+                shape = shapes.medium,
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Correo Electrónico") },
-                leadingIcon = { Icon(Icons.Default.Email,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary) },
+                value = correo,
+                onValueChange = { correo = it },
+                label = { Text("Correo electrónico") },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = colors.primary) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = shapes.medium
-
+                shape = shapes.medium,
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = pass1,
+                onValueChange = { pass1 = it },
                 label = { Text("Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colors.primary) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = shapes.medium
-
+                shape = shapes.medium,
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Confirmar Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary) },
+                value = pass2,
+                onValueChange = { pass2 = it },
+                label = { Text("Confirmar contraseña") },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colors.primary) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = shapes.medium
-
+                shape = shapes.medium,
+                singleLine = true,
+                isError = pass2.isNotBlank() && !passwordsMatch
             )
+
+            if (pass2.isNotBlank() && !passwordsMatch) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Las contraseñas no coinciden",
+                    color = colors.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { clicked = !clicked },
+                onClick = {
+                    // Aquí luego llamas tu backend/Oracle y si todo OK:
+                    onRegisterSuccess()
+                },
+                enabled = canRegister,
                 modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(48.dp)
-                    .animateContentSize(),
+                    .fillMaxWidth()
+                    .height(48.dp),
                 shape = shapes.large,
-
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )            ) {
-                if (clicked) {
-                    Text("¡Registrado!", color = Color.Black)
-                } else {
-                    Text("REGISTRARSE", color = Color.Black)
-                }
+                    containerColor = colors.primary,
+                    contentColor = colors.onPrimary
+                )
+            ) {
+                Text("REGISTRARSE")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "¿YA TE REGISTRASTE?",
-                color = MaterialTheme.colorScheme.tertiary,
+                text = "¿Ya tienes cuenta? Inicia sesión",
+                color = colors.secondary,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
-                    // Navegación a pantalla login
-                }
+                modifier = Modifier.clickable { onBackToLogin() }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    JakawiAgroTheme {
+        RegisterScreen(
+            onRegisterSuccess = {},
+            onBackToLogin = {}
+        )
     }
 }

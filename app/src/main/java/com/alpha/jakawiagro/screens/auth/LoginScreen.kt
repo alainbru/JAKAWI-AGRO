@@ -1,7 +1,5 @@
 package com.alpha.jakawiagro.screens.auth
 
-import android.content.res.Configuration
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,9 +9,9 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,13 +19,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alpha.jakawiagro.R
 import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
-import androidx.compose.material3.TextFieldDefaults
-
 
 @Composable
-fun LoginForm(onForgotPassword: () -> Unit) {
+fun LoginForm(
+    onLoginSuccess: () -> Unit,
+    onGoToRegister: () -> Unit,
+    onForgotPassword: () -> Unit
+) {
     val colors = MaterialTheme.colorScheme
     val shapes = MaterialTheme.shapes
+
+    var user by rememberSaveable { mutableStateOf("") }
+    var pass by rememberSaveable { mutableStateOf("") }
+
+    val canLogin = user.isNotBlank() && pass.isNotBlank()
 
     Scaffold { paddingValues ->
         Column(
@@ -44,37 +49,38 @@ fun LoginForm(onForgotPassword: () -> Unit) {
                 painter = painterResource(id = R.drawable.icono),
                 contentDescription = "Logo Jakawi Agro",
                 modifier = Modifier
-                    .size(240.dp)
+                    .size(200.dp)
                     .padding(bottom = 24.dp)
             )
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Usuario", color = colors.onSurface) },
+                value = user,
+                onValueChange = { user = it },
+                label = { Text("Usuario") },
                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = colors.primary) },
                 shape = shapes.medium,
-
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Contraseña", color = colors.onSurface) },
+                value = pass,
+                onValueChange = { pass = it },
+                label = { Text("Contraseña") },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colors.primary) },
                 visualTransformation = PasswordVisualTransformation(),
                 shape = shapes.medium,
-
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* Acción de login */ },
+                onClick = { onLoginSuccess() }, // luego aquí validas con Oracle
+                enabled = canLogin,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -86,15 +92,15 @@ fun LoginForm(onForgotPassword: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Column(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = "REGISTRARSE",
                     color = colors.secondary,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Acción de registro */ }
+                    modifier = Modifier.clickable { onGoToRegister() }
                 )
                 Text(
                     text = "OLVIDASTE LA CONTRASEÑA",
@@ -107,12 +113,15 @@ fun LoginForm(onForgotPassword: () -> Unit) {
     }
 }
 
-
-
-@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true)
 @Composable
-fun PreviewLoginFormDark() {
+fun PreviewLoginForm() {
     JakawiAgroTheme {
-        LoginForm(onForgotPassword = {})
+        LoginForm(
+            onLoginSuccess = {},
+            onGoToRegister = {},
+            onForgotPassword = {}
+        )
     }
 }
+
