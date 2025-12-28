@@ -5,15 +5,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.alpha.jakawiagro.screens.parcelas.toLatLng
-import com.alpha.jakawiagro.screens.parcelas.toPoint
 import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -37,7 +37,7 @@ fun ParcelasDrawScreen(
         MapProperties(mapType = MapType.SATELLITE)
     }
 
-    // ✅ gestos fluidos (y sin tilt si no quieres “3D”)
+    // ✅ fluidez
     val uiSettings = remember {
         MapUiSettings(
             zoomControlsEnabled = false,
@@ -45,30 +45,34 @@ fun ParcelasDrawScreen(
             myLocationButtonEnabled = false,
             scrollGesturesEnabled = true,
             zoomGesturesEnabled = true,
-            tiltGesturesEnabled = false
+            tiltGesturesEnabled = true
         )
     }
 
     var showDialog by remember { mutableStateOf(false) }
     var nombre by remember { mutableStateOf("") }
 
-    // ✅ convertir puntos del ViewModel a LatLng para pintar
-    val puntosLatLng by remember(ui.drawingPoints) {
-        mutableStateOf(ui.drawingPoints.map { it.toLatLng() })
+    // drawingPoints ya viene como ParcelaPoint(lat,lng)
+    val puntosLatLng = remember(ui.drawingPoints) {
+        ui.drawingPoints.map { LatLng(it.lat, it.lng) }
     }
+
+    val canSave = puntosLatLng.size >= 3
+    val faltan = (3 - puntosLatLng.size).coerceAtLeast(0)
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Dibujar parcela") },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Dibujar parcela",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { vm.clearDrawing() }) {
-                        Icon(Icons.Default.Clear, contentDescription = "Limpiar")
                     }
                 }
             )
@@ -81,23 +85,24 @@ fun ParcelasDrawScreen(
                 .padding(padding)
         ) {
 
+            // =================== MAPA ===================
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
                 properties = mapProperties,
                 uiSettings = uiSettings,
                 onMapClick = { latLng ->
+                    // ✅ OPCIÓN A: directo al ViewModel (sin mapper)
                     vm.addPoint(latLng.latitude, latLng.longitude)
                 }
             ) {
-
                 // Polígono en edición
                 if (puntosLatLng.size >= 3) {
                     Polygon(
                         points = puntosLatLng,
                         fillColor = Color(0x55388E3C),
                         strokeColor = Color(0xFF1B5E20),
-                        strokeWidth = 5f
+                        strokeWidth = 6f
                     )
                 }
 
@@ -110,54 +115,98 @@ fun ParcelasDrawScreen(
                 }
             }
 
-            // Panel inferior
-            Card(
+            // =================== PANEL INFERIOR (ESTÉTICO) ===================
+            Surface(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(14.dp),
-                elevation = CardDefaults.cardElevation(8.dp)
+                    .padding(horizontal = 12.dp, vertical = 12.dp)
+                    .fillMaxWidth(),
+                shape = MaterialTheme.shapes.extraLarge,
+                tonalElevation = 6.dp,
+                shadowElevation = 10.dp
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column {
-                        Text(
-                            "Toca el mapa para marcar puntos",
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                        Text(
-                            "Puntos: ${puntosLatLng.size}",
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                Column(modifier = Modifier.padding(14.dp)) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                "Toca el mapa para marcar límites",
+                                style = MaterialTheme.typography.titleSmall
+                            )
+                            Text(
+                                "Puntos: ${puntosLatLng.size}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+                            IconButton(
+                                onClick = {
+                                    // ✅ deshacer sin tocar ViewModel:
+                                    // quitamos 1 punto llamando clear y reinsertando (no ideal pero funciona)
+                                    // MEJOR: crea undoLast en VM, pero tú pediste no tocarlo.
+                                    val current = ui.drawingPoints
+                                    if (current.isNotEmpty()) {
+                                        vm.clearDrawing()
+                                        current.dropLast(1).forEach { p ->
+                                            vm.addPoint(p.lat, p.lng)
+                                        }
+                                    }
+                                },
+                                enabled = puntosLatLng.isNotEmpty()
+                            ) {
+                                Icon(Icons.Default.Undo, contentDescription = "Deshacer")
+                            }
+
+                            IconButton(
+                                onClick = { vm.clearDrawing() },
+                                enabled = puntosLatLng.isNotEmpty()
+                            ) {
+                                Icon(Icons.Default.Clear, contentDescription = "Limpiar")
+                            }
+                        }
                     }
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Spacer(Modifier.height(10.dp))
 
-                        FilledTonalButton(
-                            onClick = { vm.clearDrawing() }
-                        ) {
-                            Icon(Icons.Default.Clear, contentDescription = null)
-                            Spacer(Modifier.width(6.dp))
-                            Text("Limpiar")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        if (!canSave) {
+                            Text(
+                                text = "Faltan $faltan punto(s) para guardar",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        } else {
+                            Text(
+                                text = "Listo para guardar ✅",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
                         }
 
                         Button(
                             onClick = { showDialog = true },
-                            enabled = puntosLatLng.size >= 3
+                            enabled = canSave
                         ) {
                             Icon(Icons.Default.Save, contentDescription = null)
-                            Spacer(Modifier.width(6.dp))
+                            Spacer(Modifier.width(8.dp))
                             Text("Guardar")
                         }
                     }
                 }
             }
 
-            // Dialog guardar
+            // =================== DIALOG GUARDAR ===================
             if (showDialog) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
@@ -173,11 +222,12 @@ fun ParcelasDrawScreen(
                     confirmButton = {
                         Button(
                             onClick = {
+                                // ✅ OPCIÓN A: método real del VM
                                 vm.saveDrawingAsParcela(nombre.trim())
                                 nombre = ""
                                 showDialog = false
                             },
-                            enabled = puntosLatLng.size >= 3
+                            enabled = canSave
                         ) { Text("Guardar") }
                     },
                     dismissButton = {
