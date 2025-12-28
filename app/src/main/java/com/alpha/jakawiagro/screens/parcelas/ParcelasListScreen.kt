@@ -17,9 +17,9 @@ import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 @Composable
 fun ParcelasListScreen(
     onBack: () -> Unit,
-    onOpenDetail: (String) -> Unit
+    onOpenDetail: (String) -> Unit,
+    vm: ParcelasViewModel
 ) {
-    val vm: ParcelasViewModel = viewModel()
     val ui by vm.uiState.collectAsState()
 
     LaunchedEffect(Unit) { vm.loadParcelas() }

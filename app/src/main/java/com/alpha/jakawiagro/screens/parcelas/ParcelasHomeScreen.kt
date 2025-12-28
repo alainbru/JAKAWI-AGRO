@@ -8,11 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 
 @Composable
 fun ParcelasHomeScreen(
     onDraw: () -> Unit,
-    onList: () -> Unit
+    onList: () -> Unit,
+    vm: ParcelasViewModel
 ) {
     Column(
         modifier = Modifier

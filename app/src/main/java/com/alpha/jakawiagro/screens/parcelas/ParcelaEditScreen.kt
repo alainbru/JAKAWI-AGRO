@@ -15,9 +15,9 @@ import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 @Composable
 fun ParcelaEditScreen(
     parcelaId: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    vm: ParcelasViewModel
 ) {
-    val vm: ParcelasViewModel = viewModel()
     val ui by vm.uiState.collectAsState()
 
     LaunchedEffect(parcelaId) { vm.selectParcela(parcelaId) }

@@ -22,9 +22,9 @@ import com.google.maps.android.compose.*
 fun ParcelaDetailScreen(
     parcelaId: String,
     onEdit: (String) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    vm: ParcelasViewModel
 ) {
-    val vm: ParcelasViewModel = viewModel()
     val ui by vm.uiState.collectAsState()
 
     LaunchedEffect(parcelaId) {

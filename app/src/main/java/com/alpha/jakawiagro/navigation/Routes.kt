@@ -24,6 +24,8 @@ object Routes {
 
     const val PARCELA_DETAIL = "parcelas/detail/{id}"
     const val PARCELA_EDIT = "parcelas/edit/{id}"
+    const val PARCELAS_GRAPH = "parcelas_graph"
+
 
     fun parcelaDetailRoute(id: String) = "parcelas/detail/$id"
     fun parcelaEditRoute(id: String) = "parcelas/edit/$id"

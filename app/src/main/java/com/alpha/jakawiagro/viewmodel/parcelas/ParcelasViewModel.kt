@@ -64,7 +64,7 @@ class ParcelasViewModel(
     }
 
     // ====== CRUD ======
-    fun saveDrawingAsParcela(nombre: String) {
+    fun saveDrawing(nombre: String) {
         val puntos = _uiState.value.drawingPoints
         if (puntos.size < 3) return
 
@@ -142,4 +142,5 @@ class ParcelasViewModel(
                 }
         }
     }
+
 }
