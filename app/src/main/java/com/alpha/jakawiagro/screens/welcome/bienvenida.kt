@@ -1,4 +1,4 @@
-package com.alpha.jakawiagro.screens
+package com.alpha.jakawiagro.screens.welcome
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image

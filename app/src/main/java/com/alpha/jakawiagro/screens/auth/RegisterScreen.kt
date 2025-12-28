@@ -1,4 +1,4 @@
-package com.alpha.jakawiagro.screens
+package com.alpha.jakawiagro.screens.auth
 
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
@@ -128,9 +128,9 @@ fun RegisterScreen() {
                     .fillMaxWidth(0.6f)
                     .height(48.dp)
                     .animateContentSize(),
-                    shape = shapes.large,
+                shape = shapes.large,
 
-                        colors = ButtonDefaults.buttonColors(
+                colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )            ) {
@@ -154,4 +154,3 @@ fun RegisterScreen() {
         }
     }
 }
-

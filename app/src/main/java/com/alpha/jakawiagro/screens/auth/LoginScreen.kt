@@ -1,4 +1,4 @@
-package com.alpha.jakawiagro.screens
+package com.alpha.jakawiagro.screens.auth
 
 import android.content.res.Configuration
 import androidx.compose.animation.Crossfade
