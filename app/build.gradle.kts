@@ -73,6 +73,10 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.material3:material3:1.2.0")
+    //maps
+    implementation(libs.google.maps.compose)
+    implementation(libs.google.play.services.maps)
+
 }

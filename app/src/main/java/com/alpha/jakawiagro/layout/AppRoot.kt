@@ -38,8 +38,12 @@ fun AppRoot() {
         else -> "Jakawi Agro"
     }
 
+    // ✅ Evita que el drawer se abra por swipe cuando estás en el mapa
+    val disableDrawerGestures = currentRoute == Routes.PARCELAS
+
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = !disableDrawerGestures,
         drawerContent = {
             AppDrawer(
                 currentRoute = currentRoute,
@@ -58,13 +62,16 @@ fun AppRoot() {
     ) {
         Scaffold(
             topBar = {
-                MainTopAppBar(
-                    title = title,
-                    onMenuClick = { scope.launch { drawerState.open() } },
-                    onProfileClick = {
-                        navController.navigate(Routes.PERFIL) { launchSingleTop = true }
-                    }
-                )
+                // ✅ opcional: ocultar topbar en el mapa para que sea full pantalla
+                if (currentRoute != Routes.PARCELAS) {
+                    MainTopAppBar(
+                        title = title,
+                        onMenuClick = { scope.launch { drawerState.open() } },
+                        onProfileClick = {
+                            navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                        }
+                    )
+                }
             }
         ) { padding ->
             Surface(modifier = Modifier.padding(padding)) {
