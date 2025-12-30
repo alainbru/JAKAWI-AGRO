@@ -20,6 +20,8 @@ import com.alpha.jakawiagro.screens.settings.SettingsScreen
 import com.alpha.jakawiagro.screens.welcome.PantallaBienvenidaHakwai
 import com.alpha.jakawiagro.viewmodel.auth.AuthViewModel
 import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
+import com.alpha.jakawiagro.screens.perfil.ProfileScreen
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -266,16 +268,25 @@ fun NavGraph(
             )
         }
 
-        // PERFIL (placeholder)
+        // PERFIL (real) - con Drawer + TopBar (MainShell)
         composable(Routes.PERFIL) {
-            Scaffold(
-                topBar = { TopAppBar(title = { Text("Perfil") }) }
-            ) { p ->
-                Box(Modifier.fillMaxSize().padding(p), contentAlignment = Alignment.Center) {
-                    Text("Perfil (pendiente)")
+            MainShell(
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize()) {
+                    ProfileScreen(
+                        onBack = { navController.popBackStack() }
+                    )
                 }
             }
         }
+
     }
 }
 

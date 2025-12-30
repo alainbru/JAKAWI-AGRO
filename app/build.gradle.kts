@@ -62,7 +62,25 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.compose.material3)
+
+    // Icons
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // Maps
+    implementation(libs.google.maps.compose)
+    implementation(libs.google.play.services.maps)
+
+    // Firebase (BOM)
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx") // ✅ ESTA ES LA CLAVE
+
+    // Coroutines (para await)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    // Coil (imágenes)
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
@@ -74,17 +92,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.material3:material3:1.2.0")
-    //maps
-    implementation(libs.google.maps.compose)
-    implementation(libs.google.play.services.maps)
-    //base de datos
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 }
+
