@@ -168,15 +168,10 @@ fun NavGraph(
         composable(Routes.CLIMA) {
             MainShell(
                 navController = navController,
-                onLogout = {
-                    authViewModel.logout()
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.HOME) { inclusive = true }
-                    }
-                }
+                onLogout = { /* tu logout igual */ }
             ) { modifier ->
-                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Clima y alertas (próximamente)")
+                Box(modifier = modifier.fillMaxSize()) {
+                    com.alpha.jakawiagro.screens.clima.ClimaScreen()
                 }
             }
         }
