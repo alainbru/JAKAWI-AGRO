@@ -46,8 +46,11 @@ class AuthRepository(
         auth.signOut()
     }
     suspend fun resetPassword(email: String) {
-        auth.sendPasswordResetEmail(email.trim()).await()
+        FirebaseAuth.getInstance()
+            .sendPasswordResetEmail(email.trim())
+            .await()
     }
+
 
 }
 

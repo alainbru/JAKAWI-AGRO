@@ -1,72 +1,100 @@
 package com.alpha.jakawiagro.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.alpha.jakawiagro.screens.auth.Login
-import com.alpha.jakawiagro.screens.auth.Registro
 import com.alpha.jakawiagro.screens.auth.RecuperarClave
+import com.alpha.jakawiagro.screens.auth.Registro
 import com.alpha.jakawiagro.screens.home.HomeScreen
-import com.alpha.jakawiagro.screens.parcelas.Detalles
-import com.alpha.jakawiagro.screens.parcelas.Dibujar
-import com.alpha.jakawiagro.screens.parcelas.Editar
-import com.alpha.jakawiagro.screens.parcelas.Inicio
-import com.alpha.jakawiagro.screens.parcelas.Lista
+import com.alpha.jakawiagro.screens.parcelas.*
+import com.alpha.jakawiagro.screens.settings.SettingsScreen
+import com.alpha.jakawiagro.screens.welcome.PantallaBienvenidaHakwai
 import com.alpha.jakawiagro.viewmodel.auth.AuthViewModel
 import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavGraph(
     navController: NavHostController,
     authViewModel: AuthViewModel,
-    parcelasViewModel: ParcelasViewModel
+    parcelasViewModel: ParcelasViewModel,
+    useSystemTheme: Boolean,
+    darkMode: Boolean,
+    onToggleUseSystemTheme: (Boolean) -> Unit,
+    onToggleDarkMode: (Boolean) -> Unit,
 ) {
+    val authState by authViewModel.uiState.collectAsState()
+
     NavHost(
         navController = navController,
         startDestination = Routes.SPLASH
     ) {
-        composable(Routes.SPLASH) {
-            val auth = authViewModel.uiState.collectAsState().value
 
-            LaunchedEffect(auth.isLogged) {
-                if (auth.isLogged) {
+        composable(Routes.SPLASH) {
+            // UI mínima (evita pantalla blanca)
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+
+            LaunchedEffect(Unit) {
+                authViewModel.checkSession()
+            }
+
+            // decide ruta
+            LaunchedEffect(authState.isLogged) {
+                if (authState.isLogged) {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.SPLASH) { inclusive = true }
                     }
                 } else {
-                    navController.navigate(Routes.LOGIN) {
+                    navController.navigate(Routes.WELCOME) {
                         popUpTo(Routes.SPLASH) { inclusive = true }
                     }
                 }
             }
         }
 
-        // AUTH
+        composable(Routes.WELCOME) {
+            PantallaBienvenidaHakwai(
+                onContinue = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.WELCOME) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Routes.LOGIN) {
             Login(
                 authViewModel = authViewModel,
+                onGoRegister = { navController.navigate(Routes.REGISTRO) },
+                onForgotPassword = { navController.navigate(Routes.RECUPERAR_CLAVE) },
                 onLoginSuccess = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
-                },
-                onGoToRegistro = { navController.navigate(Routes.REGISTRO) },
-                onGoToRecuperar = { navController.navigate(Routes.RECUPERAR_CLAVE) }
+                }
             )
         }
 
         composable(Routes.REGISTRO) {
             Registro(
                 authViewModel = authViewModel,
+                onGoLogin = { navController.popBackStack() },
                 onRegisterSuccess = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.REGISTRO) { inclusive = true }
                     }
-                },
-                onBack = { navController.popBackStack() }
+                }
             )
         }
 
@@ -77,10 +105,12 @@ fun NavGraph(
             )
         }
 
-        // HOME
         composable(Routes.HOME) {
             HomeScreen(
+                authViewModel = authViewModel,
                 onGoParcelas = { navController.navigate(Routes.PARCELAS_INICIO) },
+                onGoPerfil = { navController.navigate(Routes.PERFIL) },
+                onGoSettings = { navController.navigate(Routes.SETTINGS) },
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate(Routes.LOGIN) {
@@ -92,43 +122,89 @@ fun NavGraph(
 
         // PARCELAS
         composable(Routes.PARCELAS_INICIO) {
-            Inicio(
+            val userId = authState.userId ?: ""
+            ParcelasInicioScreen(
                 onGoLista = { navController.navigate(Routes.PARCELAS_LISTA) },
                 onGoDibujar = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                userId = userId,
+                parcelasViewModel = parcelasViewModel
             )
         }
 
         composable(Routes.PARCELAS_LISTA) {
-            Lista(
-                authViewModel = authViewModel,
+            val userId = authState.userId ?: ""
+            ParcelasListaScreen(
+                userId = userId,
                 parcelasViewModel = parcelasViewModel,
-                onGoDetalles = { navController.navigate(Routes.PARCELAS_DETALLES) },
-                onGoEditar = { navController.navigate(Routes.PARCELAS_EDITAR) },
-                onAdd = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
+                onGoDetalles = { id -> navController.navigate(Routes.detalles(id)) },
+                onGoEditar = { id -> navController.navigate(Routes.editar(id)) },
                 onBack = { navController.popBackStack() }
             )
         }
 
         composable(Routes.PARCELAS_DIBUJAR) {
-            Dibujar(
-                authViewModel = authViewModel,
+            val userId = authState.userId ?: ""
+            ParcelasDibujarScreen(
+                userId = userId,
                 parcelasViewModel = parcelasViewModel,
-                onSaved = { navController.popBackStack() },
+                onBack = { navController.popBackStack() },
+                onSaved = {
+                    navController.navigate(Routes.PARCELAS_LISTA) {
+                        popUpTo(Routes.PARCELAS_INICIO) { inclusive = false }
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = Routes.PARCELAS_DETALLES,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            ParcelasDetallesScreen(
+                parcelaId = id,
+                parcelasViewModel = parcelasViewModel,
                 onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Routes.PARCELAS_DETALLES) {
-            Detalles(onBack = { navController.popBackStack() })
+        composable(
+            route = Routes.PARCELAS_EDITAR,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            ParcelasEditarScreen(
+                parcelaId = id,
+                parcelasViewModel = parcelasViewModel,
+                onBack = { navController.popBackStack() },
+                onSaved = { navController.popBackStack() }
+            )
         }
 
-        composable(Routes.PARCELAS_EDITAR) {
-            Editar(
-                parcelasViewModel = parcelasViewModel,
+        // SETTINGS (tema claro/oscuro)
+        composable(Routes.SETTINGS) {
+            SettingsScreen(
+                useSystemTheme = useSystemTheme,
+                darkMode = darkMode,
+                onToggleUseSystemTheme = onToggleUseSystemTheme,
+                onToggleDarkMode = onToggleDarkMode,
                 onBack = { navController.popBackStack() }
             )
+        }
+
+        // PERFIL placeholder (si luego lo completas)
+        composable(Routes.PERFIL) {
+            // puedes reemplazar luego por tu ProfileScreen real
+            Scaffold(
+                topBar = { TopAppBar(title = { Text("Perfil") }) }
+            ) { p ->
+                Box(Modifier.fillMaxSize().padding(p), contentAlignment = Alignment.Center) {
+                    Text("Perfil (pendiente)")
+                }
+            }
         }
     }
 }
+
 
