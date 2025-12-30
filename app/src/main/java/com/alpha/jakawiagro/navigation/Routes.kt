@@ -1,33 +1,25 @@
 package com.alpha.jakawiagro.navigation
 
 object Routes {
-
-    // ---------- AUTH ----------
-    const val WELCOME = "welcome"
+    // AUTH
+    const val SPLASH = "splash"
     const val LOGIN = "login"
-    const val REGISTER = "register"
+    const val REGISTRO = "registro"
+    const val RECUPERAR_CLAVE = "recuperar_clave"
 
-    const val FORGOT = "forgot"
-
-    // ---------- MAIN ----------
+    // HOME
     const val HOME = "home"
-    const val PARCELAS = "parcelas"
 
-    const val CLIMA = "heladas"
+    // PARCELAS
+    const val PARCELAS_INICIO = "parcelas/inicio"
+    const val PARCELAS_LISTA = "parcelas/lista"
+    const val PARCELAS_DIBUJAR = "parcelas/dibujar"
+    const val PARCELAS_DETALLES = "parcelas/detalles"
+    const val PARCELAS_EDITAR = "parcelas/editar"
+
+    // Otros (placeholders)
     const val PERFIL = "perfil"
     const val SETTINGS = "settings"
-
-    // ---------- PARCELAS (flujo de 5 screens) ----------
-    const val PARCELAS_HOME = "parcelas/home"
-    const val PARCELAS_DRAW = "parcelas/draw"
-    const val PARCELAS_LIST = "parcelas/list"
-
-    const val PARCELA_DETAIL = "parcelas/detail/{id}"
-    const val PARCELA_EDIT = "parcelas/edit/{id}"
-    const val PARCELAS_GRAPH = "parcelas_graph"
-
-
-    fun parcelaDetailRoute(id: String) = "parcelas/detail/$id"
-    fun parcelaEditRoute(id: String) = "parcelas/edit/$id"
+    const val CLIMA = "clima"
 }
 

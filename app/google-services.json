@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "146146830890",
+    "project_id": "jakawi-agro",
+    "storage_bucket": "jakawi-agro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146146830890:android:ddb21346147c30078bb153",
+        "android_client_info": {
+          "package_name": "com.alpha.jakawiagro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEU6x5kmzVbGdCv47Mx7-mUI15RlYtnkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,163 +1,134 @@
 package com.alpha.jakawiagro.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
-import androidx.navigation.navArgument
-
-import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
-
-import com.alpha.jakawiagro.screens.welcome.PantallaBienvenidaHakwai
-import com.alpha.jakawiagro.screens.auth.LoginForm
-import com.alpha.jakawiagro.screens.auth.RegisterScreen
-import com.alpha.jakawiagro.screens.auth.ForgotPasswordScreen
+import com.alpha.jakawiagro.screens.auth.Login
+import com.alpha.jakawiagro.screens.auth.Registro
+import com.alpha.jakawiagro.screens.auth.RecuperarClave
 import com.alpha.jakawiagro.screens.home.HomeScreen
-import com.alpha.jakawiagro.screens.clima.PronosticoHeladasScreen
-import com.alpha.jakawiagro.screens.perfil.ProfileScreen
-import com.alpha.jakawiagro.screens.settings.SettingsScreen
-
-import com.alpha.jakawiagro.screens.parcelas.ParcelasHomeScreen
-import com.alpha.jakawiagro.screens.parcelas.ParcelasDrawScreen
-import com.alpha.jakawiagro.screens.parcelas.ParcelasListScreen
-import com.alpha.jakawiagro.screens.parcelas.ParcelaDetailScreen
-import com.alpha.jakawiagro.screens.parcelas.ParcelaEditScreen
+import com.alpha.jakawiagro.screens.parcelas.Detalles
+import com.alpha.jakawiagro.screens.parcelas.Dibujar
+import com.alpha.jakawiagro.screens.parcelas.Editar
+import com.alpha.jakawiagro.screens.parcelas.Inicio
+import com.alpha.jakawiagro.screens.parcelas.Lista
+import com.alpha.jakawiagro.viewmodel.auth.AuthViewModel
+import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    startDestination: String = Routes.WELCOME
+    authViewModel: AuthViewModel,
+    parcelasViewModel: ParcelasViewModel
 ) {
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(
+        navController = navController,
+        startDestination = Routes.SPLASH
+    ) {
+        composable(Routes.SPLASH) {
+            val auth = authViewModel.uiState.collectAsState().value
 
-        composable(Routes.WELCOME) {
-            PantallaBienvenidaHakwai {
-                navController.navigate(Routes.LOGIN)
+            LaunchedEffect(auth.isLogged) {
+                if (auth.isLogged) {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.SPLASH) { inclusive = true }
+                    }
+                } else {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.SPLASH) { inclusive = true }
+                    }
+                }
             }
         }
 
+        // AUTH
         composable(Routes.LOGIN) {
-            LoginForm(
+            Login(
+                authViewModel = authViewModel,
                 onLoginSuccess = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 },
-                onGoToRegister = { navController.navigate(Routes.REGISTER) },
-                onForgotPassword = { navController.navigate(Routes.FORGOT) }
+                onGoToRegistro = { navController.navigate(Routes.REGISTRO) },
+                onGoToRecuperar = { navController.navigate(Routes.RECUPERAR_CLAVE) }
             )
         }
 
-        composable(Routes.REGISTER) {
-            RegisterScreen(
+        composable(Routes.REGISTRO) {
+            Registro(
+                authViewModel = authViewModel,
                 onRegisterSuccess = {
                     navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.WELCOME) { inclusive = true }
+                        popUpTo(Routes.REGISTRO) { inclusive = true }
                     }
                 },
-                onBackToLogin = { navController.popBackStack() }
+                onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Routes.FORGOT) {
-            ForgotPasswordScreen(
-                onBack = { navController.popBackStack() },
-                onSendReset = { _ ->
-                    navController.popBackStack()
-                }
+        composable(Routes.RECUPERAR_CLAVE) {
+            RecuperarClave(
+                authViewModel = authViewModel,
+                onBack = { navController.popBackStack() }
             )
         }
 
-        composable(Routes.HOME) { HomeScreen() }
-
-        // =========================
-        // ✅ SUBGRAFO: PARCELAS
-        // =========================
-        navigation(
-            route = Routes.PARCELAS_GRAPH,
-            startDestination = Routes.PARCELAS_HOME
-        ) {
-
-            composable(Routes.PARCELAS_HOME) { entry ->
-                val parentEntry = remember(entry) {
-                    navController.getBackStackEntry(Routes.PARCELAS_GRAPH)
-                }
-                val parcelasVm: ParcelasViewModel = viewModel(parentEntry)
-
-                ParcelasHomeScreen(
-                    vm = parcelasVm,
-                    onDraw = { navController.navigate(Routes.PARCELAS_DRAW) },
-                    onList = { navController.navigate(Routes.PARCELAS_LIST) }
-                )
-            }
-
-            composable(Routes.PARCELAS_DRAW) { entry ->
-                val parentEntry = remember(entry) {
-                    navController.getBackStackEntry(Routes.PARCELAS_GRAPH)
-                }
-                val parcelasVm: ParcelasViewModel = viewModel(parentEntry)
-
-                ParcelasDrawScreen(
-                    vm = parcelasVm,
-                    onBack = { navController.popBackStack() }
-                )
-            }
-
-            composable(Routes.PARCELAS_LIST) { entry ->
-                val parentEntry = remember(entry) {
-                    navController.getBackStackEntry(Routes.PARCELAS_GRAPH)
-                }
-                val parcelasVm: ParcelasViewModel = viewModel(parentEntry)
-
-                ParcelasListScreen(
-                    vm = parcelasVm,
-                    onBack = { navController.popBackStack() },
-                    onOpenDetail = { id ->
-                        navController.navigate(Routes.parcelaDetailRoute(id))
+        // HOME
+        composable(Routes.HOME) {
+            HomeScreen(
+                onGoParcelas = { navController.navigate(Routes.PARCELAS_INICIO) },
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
                     }
-                )
-            }
-
-            composable(
-                route = Routes.PARCELA_DETAIL,
-                arguments = listOf(navArgument("id") { type = NavType.StringType })
-            ) { entry ->
-                val parentEntry = remember(entry) {
-                    navController.getBackStackEntry(Routes.PARCELAS_GRAPH)
                 }
-                val parcelasVm: ParcelasViewModel = viewModel(parentEntry)
-
-                ParcelaDetailScreen(
-                    vm = parcelasVm,
-                    parcelaId = entry.arguments?.getString("id") ?: "",
-                    onEdit = { id -> navController.navigate(Routes.parcelaEditRoute(id)) },
-                    onBack = { navController.popBackStack() }
-                )
-            }
-
-            composable(
-                route = Routes.PARCELA_EDIT,
-                arguments = listOf(navArgument("id") { type = NavType.StringType })
-            ) { entry ->
-                val parentEntry = remember(entry) {
-                    navController.getBackStackEntry(Routes.PARCELAS_GRAPH)
-                }
-                val parcelasVm: ParcelasViewModel = viewModel(parentEntry)
-
-                ParcelaEditScreen(
-                    vm = parcelasVm,
-                    parcelaId = entry.arguments?.getString("id") ?: "",
-                    onBack = { navController.popBackStack() }
-                )
-            }
+            )
         }
 
-        composable(Routes.CLIMA) { PronosticoHeladasScreen() }
-        composable(Routes.PERFIL) { ProfileScreen() }
-        composable(Routes.SETTINGS) { SettingsScreen() }
+        // PARCELAS
+        composable(Routes.PARCELAS_INICIO) {
+            Inicio(
+                onGoLista = { navController.navigate(Routes.PARCELAS_LISTA) },
+                onGoDibujar = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.PARCELAS_LISTA) {
+            Lista(
+                authViewModel = authViewModel,
+                parcelasViewModel = parcelasViewModel,
+                onGoDetalles = { navController.navigate(Routes.PARCELAS_DETALLES) },
+                onGoEditar = { navController.navigate(Routes.PARCELAS_EDITAR) },
+                onAdd = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.PARCELAS_DIBUJAR) {
+            Dibujar(
+                authViewModel = authViewModel,
+                parcelasViewModel = parcelasViewModel,
+                onSaved = { navController.popBackStack() },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.PARCELAS_DETALLES) {
+            Detalles(onBack = { navController.popBackStack() })
+        }
+
+        composable(Routes.PARCELAS_EDITAR) {
+            Editar(
+                parcelasViewModel = parcelasViewModel,
+                onBack = { navController.popBackStack() }
+            )
+        }
     }
 }
+

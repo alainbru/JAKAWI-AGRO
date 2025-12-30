@@ -2,56 +2,102 @@ package com.alpha.jakawiagro.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpha.jakawiagro.data.auth.AuthRepository
+import com.alpha.jakawiagro.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-data class AuthUiState(
+data class AuthState(
     val loading: Boolean = false,
     val error: String? = null,
-    val success: Boolean = false
+    val isLogged: Boolean = false,
+    val userId: String? = null
 )
 
 class AuthViewModel(
-    private val repo: AuthRepository
+    private val repo: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AuthUiState())
-    val uiState: StateFlow<AuthUiState> = _uiState
+    private val _uiState = MutableStateFlow(AuthState())
+    val uiState: StateFlow<AuthState> = _uiState.asStateFlow()
+
+    fun checkSession() {
+        val user = repo.currentUser()
+        _uiState.value = _uiState.value.copy(
+            isLogged = user != null,
+            userId = user?.uid
+        )
+    }
 
     fun login(email: String, password: String) {
-        _uiState.value = AuthUiState(loading = true)
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                repo.login(email, password)
-                _uiState.value = AuthUiState(success = true)
+                val user = repo.login(email, password)
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    isLogged = true,
+                    userId = user.uid
+                )
             } catch (e: Exception) {
-                _uiState.value = AuthUiState(error = e.message ?: "Error en login")
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    error = e.message ?: "Error al iniciar sesión"
+                )
             }
         }
     }
 
-    fun register(name: String, email: String, password: String) {
-        _uiState.value = AuthUiState(loading = true)
+    fun register(
+        nombreCompleto: String,
+        email: String,
+        password: String,
+        telefono: String? = null,
+        region: String? = null
+    ) {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                repo.register(name, email, password)
-                _uiState.value = AuthUiState(success = true)
+                val user = repo.register(nombreCompleto, email, password, telefono, region)
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    isLogged = true,
+                    userId = user.uid
+                )
             } catch (e: Exception) {
-                _uiState.value = AuthUiState(error = e.message ?: "Error en registro")
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    error = e.message ?: "Error al registrar"
+                )
             }
         }
     }
 
     fun logout() {
-        viewModelScope.launch {
-            repo.logout()
-            _uiState.value = AuthUiState()
-        }
+        repo.logout()
+        _uiState.value = AuthState()
     }
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
     }
+    fun resetPassword(email: String) {
+        if (email.isBlank()) {
+            _uiState.value = _uiState.value.copy(error = "Ingresa tu correo")
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
+            try {
+                repo.resetPassword(email.trim())
+                _uiState.value = _uiState.value.copy(loading = false)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(loading = false, error = e.message)
+            }
+        }
+    }
+
 }
+
+

@@ -19,7 +19,7 @@ val drawerItems = listOf(
     DrawerItem(
         title = "Parcelas",
         icon = Icons.Default.Map,
-        route = Routes.PARCELAS_HOME
+        route = Routes.PARCELAS_INICIO
     ),
     DrawerItem(
         title = "Heladas",

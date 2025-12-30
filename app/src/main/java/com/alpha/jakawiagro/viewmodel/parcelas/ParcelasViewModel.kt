@@ -2,100 +2,100 @@ package com.alpha.jakawiagro.viewmodel.parcelas
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alpha.jakawiagro.data.parcelas.CreateParcelaRequest
-import com.alpha.jakawiagro.data.parcelas.ParcelaRepository
-import com.alpha.jakawiagro.data.parcelas.ParcelaResponse
+import com.alpha.jakawiagro.data.model.Parcela
+import com.alpha.jakawiagro.data.repository.ParcelasRepository
+import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-data class ParcelasUiState(
+data class ParcelasState(
     val loading: Boolean = false,
     val error: String? = null,
-    val parcelas: List<ParcelaResponse> = emptyList(),
-    val selected: ParcelaResponse? = null
+    val parcelas: List<Parcela> = emptyList()
 )
 
 class ParcelasViewModel(
-    private val repo: ParcelaRepository
+    private val repo: ParcelasRepository = ParcelasRepository()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ParcelasUiState())
-    val uiState: StateFlow<ParcelasUiState> = _uiState
+    private val _uiState = MutableStateFlow(ParcelasState())
+    val uiState: StateFlow<ParcelasState> = _uiState.asStateFlow()
 
-    fun listar(userId: String) {
-        _uiState.value = _uiState.value.copy(loading = true, error = null)
+    fun cargarParcelas(ownerId: String) {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                val data = repo.listByUser(userId)
-                _uiState.value = _uiState.value.copy(loading = false, parcelas = data)
+                val list = repo.obtenerParcelas(ownerId)
+                _uiState.value = _uiState.value.copy(loading = false, parcelas = list)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     loading = false,
-                    error = e.message ?: "Error listando parcelas"
+                    error = e.message ?: "Error al cargar parcelas"
                 )
             }
         }
     }
 
-    fun detalle(parcelaId: String) {
-        _uiState.value = _uiState.value.copy(loading = true, error = null)
+    fun crearParcela(
+        ownerId: String,
+        nombre: String,
+        puntosLatLng: List<LatLng>,
+        areaHa: Double? = null,
+        ubicacion: String? = null
+    ) {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                val p = repo.getById(parcelaId)
-                _uiState.value = _uiState.value.copy(loading = false, selected = p)
+                val puntos: List<GeoPoint> =
+                    puntosLatLng.map { GeoPoint(it.latitude, it.longitude) }
+
+                val parcela = Parcela(
+                    ownerId = ownerId,
+                    nombre = nombre.trim(),
+                    puntos = puntos,
+                    areaHa = areaHa,
+                    ubicacion = ubicacion?.trim()?.ifBlank { null }
+                )
+
+                repo.crearParcela(parcela)
+                cargarParcelas(ownerId)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     loading = false,
-                    error = e.message ?: "Error obteniendo detalle"
+                    error = e.message ?: "Error al crear parcela"
                 )
             }
         }
     }
 
-    fun crear(req: CreateParcelaRequest, onDone: (() -> Unit)? = null) {
-        _uiState.value = _uiState.value.copy(loading = true, error = null)
+    fun actualizarParcela(parcela: Parcela) {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                repo.create(req)
-                _uiState.value = _uiState.value.copy(loading = false)
-                onDone?.invoke()
+                repo.actualizarParcela(parcela)
+                cargarParcelas(parcela.ownerId)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     loading = false,
-                    error = e.message ?: "Error creando parcela"
+                    error = e.message ?: "Error al actualizar parcela"
                 )
             }
         }
     }
 
-    fun actualizar(parcelaId: String, req: CreateParcelaRequest, onDone: (() -> Unit)? = null) {
-        _uiState.value = _uiState.value.copy(loading = true, error = null)
+    fun eliminarParcela(id: String, ownerId: String) {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
             try {
-                val updated = repo.update(parcelaId, req)
-                _uiState.value = _uiState.value.copy(loading = false, selected = updated)
-                onDone?.invoke()
+                repo.eliminarParcela(id)
+                cargarParcelas(ownerId)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     loading = false,
-                    error = e.message ?: "Error actualizando parcela"
-                )
-            }
-        }
-    }
-
-    fun eliminar(parcelaId: String, onDone: (() -> Unit)? = null) {
-        _uiState.value = _uiState.value.copy(loading = true, error = null)
-        viewModelScope.launch {
-            try {
-                repo.delete(parcelaId)
-                _uiState.value = _uiState.value.copy(loading = false, selected = null)
-                onDone?.invoke()
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    loading = false,
-                    error = e.message ?: "Error eliminando parcela"
+                    error = e.message ?: "Error al eliminar parcela"
                 )
             }
         }
@@ -105,3 +105,5 @@ class ParcelasViewModel(
         _uiState.value = _uiState.value.copy(error = null)
     }
 }
+
+
