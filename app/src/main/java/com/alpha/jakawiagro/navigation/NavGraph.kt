@@ -107,7 +107,7 @@ fun NavGraph(
             )
         }
 
-        // ---------------- MAIN (con Drawer + TopBar) ----------------
+        // ---------------- MAIN ) ----------------
 
         composable(Routes.HOME) {
             MainShell(
@@ -164,7 +164,7 @@ fun NavGraph(
             }
         }
 
-        // CLIMA (placeholder por ahora)
+        // CLIMA
         composable(Routes.CLIMA) {
             MainShell(
                 navController = navController,
@@ -264,7 +264,7 @@ fun NavGraph(
         }
 
 
-        // PERFIL (real) - con Drawer + TopBar (MainShell)
+        // PERFIL
         composable(Routes.PERFIL) {
             MainShell(
                 navController = navController,
