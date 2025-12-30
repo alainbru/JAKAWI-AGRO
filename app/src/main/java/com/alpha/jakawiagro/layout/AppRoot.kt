@@ -1,82 +1,44 @@
 package com.alpha.jakawiagro.layout
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.alpha.jakawiagro.drawer.AppDrawer
 import com.alpha.jakawiagro.navigation.NavGraph
-import com.alpha.jakawiagro.navigation.Routes
-import com.alpha.jakawiagro.screens.MainTopAppBar
-import kotlinx.coroutines.launch
+import com.alpha.jakawiagro.ui.theme.JakawiAgroTheme
+import com.alpha.jakawiagro.viewmodel.auth.AuthViewModel
+import com.alpha.jakawiagro.viewmodel.parcelas.ParcelasViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppRoot() {
+fun AppRoot(modifier: Modifier = Modifier) {
+    // Tema manual (por defecto usa sistema)
+    var useSystemTheme by rememberSaveable { mutableStateOf(true) }
+    var darkMode by rememberSaveable { mutableStateOf(false) }
+
     val navController = rememberNavController()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
+    // ViewModels (SIN cambiar tus clases)
+    val authViewModel: AuthViewModel = viewModel()
+    val parcelasViewModel: ParcelasViewModel = viewModel()
 
-    val title = when (currentRoute) {
-        Routes.HOME -> "Inicio"
-        Routes.PARCELAS -> "Parcelas"
-        Routes.HELADAS -> "Pronóstico de Heladas"
-        Routes.PERFIL -> "Perfil"
-        Routes.SETTINGS -> "Configuración"
-        else -> "Jakawi Agro"
-    }
-
-    // ✅ Evita que el drawer se abra por swipe cuando estás en el mapa
-    val disableDrawerGestures = currentRoute == Routes.PARCELAS
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = !disableDrawerGestures,
-        drawerContent = {
-            AppDrawer(
-                currentRoute = currentRoute,
-                onItemClick = { route ->
-                    scope.launch {
-                        drawerState.close()
-                        navController.navigate(route) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        }
-                    }
-                }
-            )
-        }
+    JakawiAgroTheme(
+        darkTheme = if (useSystemTheme) androidx.compose.foundation.isSystemInDarkTheme() else darkMode,
+        dynamicColor = false
     ) {
-        Scaffold(
-            topBar = {
-                // ✅ opcional: ocultar topbar en el mapa para que sea full pantalla
-                if (currentRoute != Routes.PARCELAS) {
-                    MainTopAppBar(
-                        title = title,
-                        onMenuClick = { scope.launch { drawerState.open() } },
-                        onProfileClick = {
-                            navController.navigate(Routes.PERFIL) { launchSingleTop = true }
-                        }
-                    )
-                }
-            }
-        ) { padding ->
-            Surface(modifier = Modifier.padding(padding)) {
-                NavGraph(navController = navController)
-            }
-        }
+        NavGraph(
+            navController = navController,
+            authViewModel = authViewModel,
+            parcelasViewModel = parcelasViewModel,
+            // settings theme control
+            useSystemTheme = useSystemTheme,
+            darkMode = darkMode,
+            onToggleUseSystemTheme = { useSystemTheme = it },
+            onToggleDarkMode = { darkMode = it }
+        )
     }
 }
+
+
+
+

@@ -1,24 +1,39 @@
 package com.alpha.jakawiagro.drawer
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material.icons.filled.*
 import com.alpha.jakawiagro.navigation.Routes
 
 data class DrawerItem(
     val title: String,
-    val icon: ImageVector,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val route: String
 )
 
 val drawerItems = listOf(
-    DrawerItem("Inicio", Icons.Default.Home, Routes.HOME),
-    DrawerItem("Parcelas", Icons.Default.Map, Routes.PARCELAS),
-    DrawerItem("Heladas", Icons.Default.Cloud, Routes.HELADAS),
-    DrawerItem("Perfil", Icons.Default.Person, Routes.PERFIL),
-    DrawerItem("Configuración", Icons.Default.Settings, Routes.SETTINGS)
+    DrawerItem(
+        title = "Inicio",
+        icon = Icons.Default.Home,
+        route = Routes.HOME
+    ),
+    DrawerItem(
+        title = "Parcelas",
+        icon = Icons.Default.Map,
+        route = Routes.PARCELAS_INICIO
+    ),
+    DrawerItem(
+        title = "Heladas",
+        icon = Icons.Default.Cloud,
+        route = Routes.CLIMA
+    ),
+    DrawerItem(
+        title = "Perfil",
+        icon = Icons.Default.Person,
+        route = Routes.PERFIL
+    ),
+    DrawerItem(
+        title = "Configuración",
+        icon = Icons.Default.Settings,
+        route = Routes.SETTINGS
+    )
 )
