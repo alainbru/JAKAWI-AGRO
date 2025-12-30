@@ -5,12 +5,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.alpha.jakawiagro.layout.MainShell
 import com.alpha.jakawiagro.screens.auth.Login
 import com.alpha.jakawiagro.screens.auth.RecuperarClave
 import com.alpha.jakawiagro.screens.auth.Registro
@@ -39,8 +39,8 @@ fun NavGraph(
         startDestination = Routes.SPLASH
     ) {
 
+        // ---------------- SPLASH ----------------
         composable(Routes.SPLASH) {
-            // UI mínima (evita pantalla blanca)
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -49,7 +49,6 @@ fun NavGraph(
                 authViewModel.checkSession()
             }
 
-            // decide ruta
             LaunchedEffect(authState.isLogged) {
                 if (authState.isLogged) {
                     navController.navigate(Routes.HOME) {
@@ -63,6 +62,7 @@ fun NavGraph(
             }
         }
 
+        // ---------------- WELCOME/AUTH ----------------
         composable(Routes.WELCOME) {
             PantallaBienvenidaHakwai(
                 onContinue = {
@@ -105,32 +105,105 @@ fun NavGraph(
             )
         }
 
+        // ---------------- MAIN (con Drawer + TopBar) ----------------
+
         composable(Routes.HOME) {
-            HomeScreen(
-                authViewModel = authViewModel,
-                onGoParcelas = { navController.navigate(Routes.PARCELAS_INICIO) },
-                onGoPerfil = { navController.navigate(Routes.PERFIL) },
-                onGoSettings = { navController.navigate(Routes.SETTINGS) },
+            MainShell(
+                navController = navController,
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 }
-            )
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize()) {
+                    HomeScreen(
+                        onGoCultivos = { navController.navigate(Routes.CULTIVOS) },
+                        onGoParcelas = { navController.navigate(Routes.PARCELAS_INICIO) },
+                        onGoCalendario = { navController.navigate(Routes.CALENDARIO) },
+                        onGoClima = { navController.navigate(Routes.CLIMA) }
+                    )
+                }
+            }
         }
 
-        // PARCELAS
+        // CULTIVOS (placeholder por ahora)
+        composable(Routes.CULTIVOS) {
+            MainShell(
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Cultivos (próximamente)")
+                }
+            }
+        }
+
+        // CALENDARIO (placeholder por ahora)
+        composable(Routes.CALENDARIO) {
+            MainShell(
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Calendario (próximamente)")
+                }
+            }
+        }
+
+        // CLIMA (placeholder por ahora)
+        composable(Routes.CLIMA) {
+            MainShell(
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Clima y alertas (próximamente)")
+                }
+            }
+        }
+
+        // PARCELAS INICIO (si tu screen NO tiene topbar propia, queda perfecto)
         composable(Routes.PARCELAS_INICIO) {
             val userId = authState.userId ?: ""
-            ParcelasInicioScreen(
-                onGoLista = { navController.navigate(Routes.PARCELAS_LISTA) },
-                onGoDibujar = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
-                onBack = { navController.popBackStack() },
-                userId = userId,
-                parcelasViewModel = parcelasViewModel
-            )
+            MainShell(
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout()
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            ) { modifier ->
+                Box(modifier = modifier.fillMaxSize()) {
+                    ParcelasInicioScreen(
+                        onGoLista = { navController.navigate(Routes.PARCELAS_LISTA) },
+                        onGoDibujar = { navController.navigate(Routes.PARCELAS_DIBUJAR) },
+                        onBack = { navController.popBackStack() },
+                        userId = userId,
+                        parcelasViewModel = parcelasViewModel
+                    )
+                }
+            }
         }
+
+        // --------- PARCELAS (pantallas secundarias, por ahora SIN MainShell para evitar doble topbar) ---------
 
         composable(Routes.PARCELAS_LISTA) {
             val userId = authState.userId ?: ""
@@ -193,9 +266,8 @@ fun NavGraph(
             )
         }
 
-        // PERFIL placeholder (si luego lo completas)
+        // PERFIL (placeholder)
         composable(Routes.PERFIL) {
-            // puedes reemplazar luego por tu ProfileScreen real
             Scaffold(
                 topBar = { TopAppBar(title = { Text("Perfil") }) }
             ) { p ->

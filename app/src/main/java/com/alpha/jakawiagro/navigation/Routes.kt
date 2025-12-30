@@ -29,5 +29,7 @@ object Routes {
     const val PERFIL = "perfil"
     const val SETTINGS = "settings"
     const val CLIMA = "clima"
-}
+    const val CULTIVOS = "cultivos"
+    const val CALENDARIO = "calendario"
 
+}
